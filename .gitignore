@@ -1,0 +1,9 @@
+# Build and test output
+bin/
+obj/
+*.binlog
+
+# Per-user files created by IDEs
+*.suo
+*.user
+.vs/
