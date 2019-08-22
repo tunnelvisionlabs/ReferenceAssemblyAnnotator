@@ -24,6 +24,11 @@
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)build\Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
   <!-- Code style -->
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />

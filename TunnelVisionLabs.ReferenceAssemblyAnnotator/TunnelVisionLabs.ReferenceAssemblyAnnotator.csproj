@@ -17,11 +17,6 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.0.461" PrivateAssets="all" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\build\Key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-
   <ItemGroup>
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.props" Pack="true" PackagePath="build" />
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.targets" Pack="true" PackagePath="build" />
