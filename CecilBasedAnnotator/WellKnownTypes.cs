@@ -20,10 +20,15 @@ namespace CecilBasedAnnotator
         }
 
         public ModuleDefinition Module { get; }
+
         public TypeSystem TypeSystem => Module.TypeSystem;
+
         public TypeReference SystemAttribute { get; }
+
         public TypeReference SystemAttributeTargets { get; }
+
         public TypeReference SystemAttributeUsageAttribute { get; }
+
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
 
         private static TypeDefinition ResolveWellKnownType(ModuleDefinition module, Type type)

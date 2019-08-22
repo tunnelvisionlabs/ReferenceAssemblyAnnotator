@@ -58,7 +58,7 @@ namespace CecilBasedAnnotator
             attributesOfInterest.Add(maybeNullAttribute.FullName, maybeNullAttribute);
             attributesOfInterest.Add(maybeNullWhenAttribute.FullName, maybeNullWhenAttribute);
             attributesOfInterest.Add(notNullAttribute.FullName, notNullAttribute);
-            attributesOfInterest.Add(notNullIfNotNullAttribute.FullName,notNullIfNotNullAttribute);
+            attributesOfInterest.Add(notNullIfNotNullAttribute.FullName, notNullIfNotNullAttribute);
             attributesOfInterest.Add(notNullWhenAttribute.FullName, notNullWhenAttribute);
 
             AnnotateAssembly(assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
