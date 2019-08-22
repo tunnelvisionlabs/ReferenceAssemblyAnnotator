@@ -3,8 +3,13 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net472</TargetFrameworks>
 
+    <CopyLocalLockFileDependencies>true</CopyLocalLockFileDependencies>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\TunnelVisionLabs.ReferenceAssemblyAnnotator.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,0 +1,15 @@
+version: '{build}'
+image: Visual Studio 2019
+configuration:
+- Debug
+- Release
+init:
+- git config --global core.autocrlf true
+before_build:
+- nuget restore
+skip_tags: true
+build:
+  project: ReferenceAssemblyAnnotator.sln
+  verbosity: minimal
+artifacts:
+- path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'

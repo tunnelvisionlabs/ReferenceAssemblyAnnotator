@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>8</LangVersion>
+    <Features>strict</Features>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' != 'true'">
+    <!-- Ideally this is always enabled, but that tends to hurt developer productivity -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+      Make sure any documentation comments which are included in code get checked for syntax during the build, but do
+      not report warnings for missing comments.
+
+      CS1573: Parameter 'parameter' has no matching param tag in the XML comment for 'parameter' (but other parameters do)
+      CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
+      CS1712: Type parameter 'type_parameter' has no matching typeparam tag in the XML comment on 'type_or_member' (but other type parameters do)
+    -->
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
+  </PropertyGroup>
+
+  <!-- Code style -->
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <!-- Versioning and packaging -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="2.2.13" PrivateAssets="all" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <Description>IL weaver for adding nullability annotations to .NET Framework and .NET Standard reference assemblies.</Description>
+    <Product>TunnelVisionLabs.ReferenceAssemblyAnnotator</Product>
+    <Company>Tunnel Vision Laboratories, LLC</Company>
+    <Copyright>Copyright © Tunnel Vision Laboratories, LLC 2019</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Authors>sharwell</Authors>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <!--
+      NU5105: The package version 'version' uses SemVer 2.0.0 or components of SemVer 1.0.0 that are not supported on
+              legacy clients. Change the package version to a SemVer 1.0.0 string. If the version contains a release
+              label it must start with a letter. This message can be ignored if the package is not intended for older
+              clients.
+    -->
+    <NoWarn>$(NoWarn),NU5105</NoWarn>
+  </PropertyGroup>
+
+</Project>
