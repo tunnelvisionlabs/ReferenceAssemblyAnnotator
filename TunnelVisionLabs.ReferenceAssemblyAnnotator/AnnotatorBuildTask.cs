@@ -3,17 +3,22 @@
 
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Resources;
-    using System.Text;
+    using System.IO;
+    using System.Linq;
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
 
     public sealed class AnnotatorBuildTask : Task
     {
         [Required]
-        public ITaskItem[] ReferenceAssemblies
+        public ITaskItem UnannotatedReferenceAssembly
+        {
+            get;
+            set;
+        }
+
+        [Required]
+        public ITaskItem[] TargetFrameworkDirectories
         {
             get;
             set;
@@ -42,7 +47,33 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public override bool Execute()
         {
-            throw new NotImplementedException();
+            var unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).SingleOrDefault(File.Exists);
+            var annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
+            bool foundAnnotatedAssembly = File.Exists(annotatedReferenceAssembly);
+
+            Log.LogMessage($"Generating reference assembly for {UnannotatedReferenceAssembly}");
+            Log.LogMessage($"  Unannotated: {unannotatedReferenceAssembly ?? "Unknown"})");
+            Log.LogMessage($"  Annotated:   {annotatedReferenceAssembly}{(foundAnnotatedAssembly ? string.Empty : " (Not found)")})");
+            Log.LogMessage($"  Output:      {Path.GetFullPath(OutputPath)}");
+
+            if (unannotatedReferenceAssembly is null)
+            {
+                Log.LogError("Could not find input reference assembly");
+                return false;
+            }
+
+            if (!foundAnnotatedAssembly)
+            {
+                Log.LogError("Could not find input annotated reference assembly");
+                return false;
+            }
+
+            Directory.CreateDirectory(OutputPath);
+            var outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
+            Program.Main(new[] { unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly });
+            GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
+
+            return true;
         }
     }
 }

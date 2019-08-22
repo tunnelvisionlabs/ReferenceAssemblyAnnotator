@@ -3,4 +3,59 @@
 
   <UsingTask TaskName="TunnelVisionLabs.ReferenceAssemblyAnnotator.AnnotatorBuildTask" AssemblyFile="$(ReferenceAssemblyAnnotatorBuildTaskPath)TunnelVisionLabs.ReferenceAssemblyAnnotator.dll" />
 
+  <PropertyGroup>
+    <ResolveAssemblyReferencesDependsOn>
+      $(ResolveAssemblyReferencesDependsOn);
+      AnnotateReferenceAssemblies
+    </ResolveAssemblyReferencesDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AnnotatedReferenceAssemblyDirectory Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">$(NuGetPackageRoot)microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\netcoreapp3.0\</AnnotatedReferenceAssemblyDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AnnotatedReferenceAssembly Include="$(AnnotatedReferenceAssemblyDirectory)*.dll" />
+  </ItemGroup>
+
+  <Target Name="ResolveAvailableReferenceAssemblies"
+          DependsOnTargets="GetReferenceAssemblyPaths">
+    <ItemGroup>
+      <AvailableUnannotatedReferenceAssemblyDirectory Include="$(TargetFrameworkDirectory)" />
+      <AvailableUnannotatedReferenceAssembly Include="@(AvailableUnannotatedReferenceAssemblyDirectory->'%(Identity)*.dll')" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="ResolveOutputReferenceAssemblies">
+    <PropertyGroup>
+      <AnnotatedReferenceAssemblyOutputPath Condition="'$(AnnotatedReferenceAssemblyOutputPath)' == ''">$(IntermediateOutputPath)annotated\</AnnotatedReferenceAssemblyOutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <UnannotatedReferenceAssembly Update="@(UnannotatedReferenceAssembly)" OutputAssembly="$(AnnotatedReferenceAssemblyOutputDirectory)%(Identity).dll" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="AnnotateReferenceAssemblies"
+          DependsOnTargets="$(AnnotateReferenceAssembliesDependsOn)"
+          Inputs="@(AvailableUnannotatedReferenceAssembly);@(AnnotatedReferenceAssembly)"
+          Outputs="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')">
+
+    <AnnotatorBuildTask
+      UnannotatedReferenceAssembly="%(UnannotatedReferenceAssembly.Identity)"
+      TargetFrameworkDirectories="@(AvailableUnannotatedReferenceAssemblyDirectory)"
+      AnnotatedReferenceAssemblyDirectory="$(AnnotatedReferenceAssemblyDirectory)"
+      OutputPath="$(AnnotatedReferenceAssemblyOutputPath)">
+      <Output ItemName="GeneratedReferenceAssemblies" TaskParameter="GeneratedAssemblies" />
+    </AnnotatorBuildTask>
+
+    <ItemGroup>
+      <FileWrites Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <!-- Add the annotated assembly directory as the first search path -->
+      <TargetFrameworkDirectory>$(AnnotatedReferenceAssemblyOutputPath);$(TargetFrameworkDirectory)</TargetFrameworkDirectory>
+    </PropertyGroup>
+  </Target>
+
 </Project>
