@@ -22,7 +22,9 @@
           DependsOnTargets="GetReferenceAssemblyPaths">
     <ItemGroup>
       <AvailableUnannotatedReferenceAssemblyDirectory Include="$(TargetFrameworkDirectory)" />
-      <AvailableUnannotatedReferenceAssembly Include="@(AvailableUnannotatedReferenceAssemblyDirectory->'%(Identity)*.dll')" />
+      <!-- Use an intermediate item group so AvailableUnannotatedReferenceAssembly contains the expanded glob -->
+      <_AvailableUnannotatedReferenceAssembly Include="@(AvailableUnannotatedReferenceAssemblyDirectory->'%(Identity)*.dll')" />
+      <AvailableUnannotatedReferenceAssembly Include="@(_AvailableUnannotatedReferenceAssemblyDirectory)" />
     </ItemGroup>
   </Target>
 
@@ -31,7 +33,7 @@
       <AnnotatedReferenceAssemblyOutputPath Condition="'$(AnnotatedReferenceAssemblyOutputPath)' == ''">$(IntermediateOutputPath)annotated\</AnnotatedReferenceAssemblyOutputPath>
     </PropertyGroup>
     <ItemGroup>
-      <UnannotatedReferenceAssembly Update="@(UnannotatedReferenceAssembly)" OutputAssembly="$(AnnotatedReferenceAssemblyOutputDirectory)%(Identity).dll" />
+      <UnannotatedReferenceAssembly Update="@(UnannotatedReferenceAssembly)" OutputAssembly="$(AnnotatedReferenceAssemblyOutputPath)%(Identity).dll" />
     </ItemGroup>
   </Target>
 
