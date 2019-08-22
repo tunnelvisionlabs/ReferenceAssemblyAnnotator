@@ -54,7 +54,7 @@
 
     <PropertyGroup>
       <!-- Add the annotated assembly directory as the first search path -->
-      <TargetFrameworkDirectory>$(AnnotatedReferenceAssemblyOutputPath);$(TargetFrameworkDirectory)</TargetFrameworkDirectory>
+      <TargetFrameworkDirectory>$([MSBuild]::NormalizeDirectory('$(AnnotatedReferenceAssemblyOutputPath)'));$(TargetFrameworkDirectory)</TargetFrameworkDirectory>
     </PropertyGroup>
   </Target>
 
