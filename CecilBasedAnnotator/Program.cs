@@ -1,15 +1,15 @@
 ﻿// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using Mono.Cecil;
-using Mono.Cecil.Rocks;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
 namespace CecilBasedAnnotator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using Mono.Cecil;
+    using Mono.Cecil.Rocks;
+
     class Program
     {
         static void Main(string[] args)

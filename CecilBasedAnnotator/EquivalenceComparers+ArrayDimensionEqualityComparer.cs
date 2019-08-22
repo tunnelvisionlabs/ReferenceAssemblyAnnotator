@@ -3,8 +3,8 @@
 
 namespace CecilBasedAnnotator
 {
-    using Mono.Cecil;
     using System.Collections.Generic;
+    using Mono.Cecil;
 
     internal static partial class EquivalenceComparers
     {

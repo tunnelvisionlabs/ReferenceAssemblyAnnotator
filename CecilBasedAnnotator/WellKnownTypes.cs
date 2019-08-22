@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using Mono.Cecil;
-using System;
-using System.Runtime.CompilerServices;
-
 namespace CecilBasedAnnotator
 {
+    using System;
+    using System.Runtime.CompilerServices;
+    using Mono.Cecil;
+
     internal class WellKnownTypes
     {
         public WellKnownTypes(ModuleDefinition module)
