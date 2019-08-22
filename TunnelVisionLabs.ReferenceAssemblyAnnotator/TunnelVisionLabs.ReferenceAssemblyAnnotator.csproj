@@ -6,6 +6,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    <PackageId>TunnelVisionLabs.ReferenceAssemblyAnnotator.NewIdRequiredDueToNuGetBug</PackageId>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -34,6 +35,16 @@
 
       <TfmSpecificPackageFile Include="@(_File)" PackagePath="%(_File.PackagePath)/$(TargetFramework)/%(_File.Filename)%(_File.Extension)" />
     </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);RestorePackageId</GenerateNuspecDependsOn>
+  </PropertyGroup>
+
+  <Target Name="RestorePackageId">
+    <PropertyGroup>
+      <PackageId>TunnelVisionLabs.ReferenceAssemblyAnnotator</PackageId>
+    </PropertyGroup>
   </Target>
 
 </Project>
