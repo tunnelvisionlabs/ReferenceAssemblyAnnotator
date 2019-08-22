@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "mscorlib": {
+      "commandName": "Project",
+      "commandLineArgs": "\"$(NuGetPackageRoot)\\microsoft.netframework.referenceassemblies.net45\\1.0.0-preview.2\\build\\.NETFramework\\v4.5\\mscorlib.dll\" \"$(NuGetPackageRoot)\\microsoft.netcore.app.ref\\3.0.0-preview8-28405-07\\ref\\netcoreapp3.0\\mscorlib.dll\" mscorlib2.dll"
+    },
+    "System": {
+      "commandName": "Project",
+      "commandLineArgs": "\"$(NuGetPackageRoot)\\microsoft.netframework.referenceassemblies.net45\\1.0.0-preview.2\\build\\.NETFramework\\v4.5\\System.dll\" \"$(NuGetPackageRoot)\\microsoft.netcore.app.ref\\3.0.0-preview8-28405-07\\ref\\netcoreapp3.0\\System.dll\" System2.dll"
+    }
+  }
+}
