@@ -1,4 +1,7 @@
-﻿using Mono.Cecil;
+﻿// Copyright (c) Tunnel Vision Laboratories, LLC. All Rights Reserved.
+// Licensed under the MIT License. See LICENSE in the project root for license information.
+
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 
 namespace CecilBasedAnnotator
