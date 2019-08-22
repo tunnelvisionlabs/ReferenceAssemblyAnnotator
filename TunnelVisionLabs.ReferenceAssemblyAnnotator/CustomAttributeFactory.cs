@@ -69,10 +69,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             var customAttribute = new CustomAttribute(_wellKnownTypes.Module.ImportReference(constructor));
             customAttribute.ConstructorArguments.Add(new CustomAttributeArgument(_wellKnownTypes.SystemAttributeTargets, (int)validOn));
             if (allowMultiple is object)
-                customAttribute.Properties.Add(new CustomAttributeNamedArgument(nameof(AttributeUsageAttribute.AllowMultiple), new CustomAttributeArgument(_wellKnownTypes.TypeSystem.Boolean, allowMultiple.Value)));
+                customAttribute.Properties.Add(new CustomAttributeNamedArgument(nameof(AttributeUsageAttribute.AllowMultiple), new CustomAttributeArgument(_wellKnownTypes.TypeSystem.Boolean, allowMultiple!.Value)));
 
             if (inherited is object)
-                customAttribute.Properties.Add(new CustomAttributeNamedArgument(nameof(AttributeUsageAttribute.Inherited), new CustomAttributeArgument(_wellKnownTypes.TypeSystem.Boolean, inherited.Value)));
+                customAttribute.Properties.Add(new CustomAttributeNamedArgument(nameof(AttributeUsageAttribute.Inherited), new CustomAttributeArgument(_wellKnownTypes.TypeSystem.Boolean, inherited!.Value)));
 
             return customAttribute;
         }
