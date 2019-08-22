@@ -23,4 +23,17 @@
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.targets" Pack="true" PackagePath="build" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_GetFilesToPackage</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+
+  <Target Name="_GetFilesToPackage">
+    <ItemGroup>
+      <_File Include="$(OutputPath)Mono.Cecil.dll" Pack="true" PackagePath="tools" />
+      <_File Include="$(OutputPath)Mono.Cecil.Rocks.dll" Pack="true" PackagePath="tools" />
+
+      <TfmSpecificPackageFile Include="@(_File)" PackagePath="%(_File.PackagePath)/$(TargetFramework)/%(_File.Filename)%(_File.Extension)" />
+    </ItemGroup>
+  </Target>
+
 </Project>
