@@ -10,9 +10,9 @@ namespace CecilBasedAnnotator
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             string referenceAssembly = args[0];
             string annotatedReferenceAssembly = args[1];
