@@ -8,7 +8,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        private sealed class PropertyDefinitionEquivalenceComparer : IEqualityComparer<PropertyDefinition>
+        private sealed class PropertyDefinitionEquivalenceComparer : IEqualityComparer<PropertyDefinition?>
         {
             public static readonly PropertyDefinitionEquivalenceComparer Instance = new PropertyDefinitionEquivalenceComparer();
 
@@ -16,7 +16,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            public bool Equals(PropertyDefinition x, PropertyDefinition y)
+            public bool Equals(PropertyDefinition? x, PropertyDefinition? y)
             {
                 if (x is null || y is null)
                     return ReferenceEquals(x, y);
@@ -34,7 +34,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 return true;
             }
 
-            public int GetHashCode(PropertyDefinition obj)
+            public int GetHashCode(PropertyDefinition? obj)
             {
                 if (obj is null)
                     return 0;

@@ -10,6 +10,16 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     public sealed class AnnotatorBuildTask : Task
     {
+        public AnnotatorBuildTask()
+        {
+            // These required properties will all be assigned by MSBuild. Suppress warnings about leaving them with
+            // their default values.
+            UnannotatedReferenceAssembly = null!;
+            TargetFrameworkDirectories = null!;
+            AnnotatedReferenceAssemblyDirectory = null!;
+            OutputPath = null!;
+        }
+
         [Required]
         public ITaskItem UnannotatedReferenceAssembly
         {
@@ -39,7 +49,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         }
 
         [Output]
-        public ITaskItem[] GeneratedAssemblies
+        public ITaskItem[]? GeneratedAssemblies
         {
             get;
             set;

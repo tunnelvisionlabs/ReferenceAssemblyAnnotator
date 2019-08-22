@@ -8,7 +8,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        private sealed class TypeDefinitionEquivalenceComparer : IEqualityComparer<TypeDefinition>
+        private sealed class TypeDefinitionEquivalenceComparer : IEqualityComparer<TypeDefinition?>
         {
             public static readonly TypeDefinitionEquivalenceComparer Instance = new TypeDefinitionEquivalenceComparer();
 
@@ -16,7 +16,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            public bool Equals(TypeDefinition x, TypeDefinition y)
+            public bool Equals(TypeDefinition? x, TypeDefinition? y)
             {
                 if (x is null || y is null)
                     return ReferenceEquals(x, y);
@@ -40,7 +40,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 return true;
             }
 
-            public int GetHashCode(TypeDefinition obj)
+            public int GetHashCode(TypeDefinition? obj)
             {
                 if (obj is null)
                     return 0;

@@ -1,3 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
+
+  <Choose>
+    <When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+      <ItemGroup>
+        <UnannotatedReferenceAssembly Include="System" />
+        <UnannotatedReferenceAssembly Include="System.Core" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
 </Project>
