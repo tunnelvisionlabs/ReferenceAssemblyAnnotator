@@ -2,6 +2,8 @@
 
 IL weaver for adding nullability annotations to .NET Framework and .NET Standard reference assemblies.
 
+[![Build status](https://ci.appveyor.com/api/projects/status/pikrerggo7mi7dy5/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/referenceassemblyannotator/branch/master)
+
 [![codecov](https://codecov.io/gh/tunnelvisionlabs/ReferenceAssemblyAnnotator/branch/master/graph/badge.svg)](https://codecov.io/gh/tunnelvisionlabs/ReferenceAssemblyAnnotator)
 
 [![Join the chat at https://gitter.im/tunnelvisionlabs/ReferenceAssemblyAnnotator](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tunnelvisionlabs/ReferenceAssemblyAnnotator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
