@@ -166,13 +166,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 if (!attributesOfInterest.TryGetValue(customAttribute.AttributeType.FullName, out var attributeTypeDefinition))
                     continue;
 
-                if (attributeTypeDefinition.Methods.Count != 1)
-                    continue;
-
                 if (customAttribute.Fields.Count != 0 || customAttribute.Properties.Count != 0)
                     continue;
 
-                var constructor = attributeTypeDefinition.Methods.Single();
+                var constructor = attributeTypeDefinition.Methods.SingleOrDefault(method => IsMatchingConstructor(method, customAttribute));
+                if (constructor is null)
+                    continue;
+
                 var newCustomAttribute = new CustomAttribute(constructor);
                 for (var i = 0; i < customAttribute.ConstructorArguments.Count; i++)
                 {
@@ -180,6 +180,20 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 }
 
                 provider.CustomAttributes.Add(newCustomAttribute);
+            }
+
+            static bool IsMatchingConstructor(MethodDefinition constructor, CustomAttribute customAttribute)
+            {
+                if (constructor.Parameters.Count != customAttribute.ConstructorArguments.Count)
+                    return false;
+
+                for (int i = 0; i < constructor.Parameters.Count; i++)
+                {
+                    if (!EquivalenceComparers.TypeReference.Equals(constructor.Parameters[i].ParameterType, customAttribute.ConstructorArguments[i].Type))
+                        return false;
+                }
+
+                return true;
             }
         }
 
