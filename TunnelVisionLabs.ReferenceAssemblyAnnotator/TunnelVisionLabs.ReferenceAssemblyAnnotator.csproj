@@ -22,6 +22,8 @@
   <ItemGroup>
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.props" Pack="true" PackagePath="build" />
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.targets" Pack="true" PackagePath="build" />
+    <Content Include="NullableAttributes.cs" Pack="true" PackagePath="build" />
+    <Content Include="NullableAttributes.vb" Pack="true" PackagePath="build" />
   </ItemGroup>
 
   <PropertyGroup>
