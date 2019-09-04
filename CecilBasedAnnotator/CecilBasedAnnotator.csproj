@@ -27,6 +27,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.0.461" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.0.461" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TunnelVisionLabs.ReferenceAssemblyAnnotator\TunnelVisionLabs.ReferenceAssemblyAnnotator.csproj" />
   </ItemGroup>
 

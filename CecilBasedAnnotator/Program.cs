@@ -7,7 +7,7 @@ namespace CecilBasedAnnotator
     {
         private static void Main(string[] args)
         {
-            TunnelVisionLabs.ReferenceAssemblyAnnotator.Program.Main(args);
+            TunnelVisionLabs.ReferenceAssemblyAnnotator.Program.Main(log: null, args[0], args[1], args[2]);
         }
     }
 }

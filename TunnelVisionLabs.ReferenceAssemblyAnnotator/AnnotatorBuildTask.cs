@@ -70,7 +70,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             Directory.CreateDirectory(OutputPath);
             var outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
-            Program.Main(new[] { unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly });
+            Program.Main(Log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
             GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
 
             return true;
