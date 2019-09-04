@@ -4,6 +4,18 @@
   <UsingTask TaskName="TunnelVisionLabs.ReferenceAssemblyAnnotator.AnnotatorBuildTask" AssemblyFile="$(ReferenceAssemblyAnnotatorBuildTaskPath)TunnelVisionLabs.ReferenceAssemblyAnnotator.dll" />
 
   <PropertyGroup>
+    <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == ''">true</GenerateNullableAttributes>
+    <NullableAttributesPath Condition="'$(NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes$(DefaultLanguageSourceExtension)</NullableAttributesPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(GenerateNullableAttributes)' == 'true' AND Exists($(NullableAttributesPath))">
+    <Compile Include="$(NullableAttributesPath)" Visible="false" />
+
+    <!-- Make sure the source file is embedded in PDB to support Source Link -->
+    <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(NullableAttributesPath)" />
+  </ItemGroup>
+
+  <PropertyGroup>
     <ResolveAssemblyReferencesDependsOn>
       $(ResolveAssemblyReferencesDependsOn);
       AnnotateReferenceAssemblies;
