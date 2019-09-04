@@ -9,7 +9,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        private sealed class MethodDefinitionEquivalenceComparer : IEqualityComparer<MethodDefinition>
+        private sealed class MethodDefinitionEquivalenceComparer : IEqualityComparer<MethodDefinition?>
         {
             public static readonly MethodDefinitionEquivalenceComparer Instance = new MethodDefinitionEquivalenceComparer();
 
@@ -17,7 +17,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            public bool Equals(MethodDefinition x, MethodDefinition y)
+            public bool Equals(MethodDefinition? x, MethodDefinition? y)
             {
                 if (x is null || y is null)
                     return ReferenceEquals(x, y);
@@ -46,7 +46,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 return true;
             }
 
-            public int GetHashCode(MethodDefinition obj)
+            public int GetHashCode(MethodDefinition? obj)
             {
                 if (obj is null)
                     return 0;

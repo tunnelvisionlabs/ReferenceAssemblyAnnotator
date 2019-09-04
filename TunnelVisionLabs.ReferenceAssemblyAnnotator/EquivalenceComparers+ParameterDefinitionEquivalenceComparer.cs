@@ -8,7 +8,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        private sealed class ParameterDefinitionEquivalenceComparer : IEqualityComparer<ParameterDefinition>
+        private sealed class ParameterDefinitionEquivalenceComparer : IEqualityComparer<ParameterDefinition?>
         {
             public static readonly ParameterDefinitionEquivalenceComparer Instance = new ParameterDefinitionEquivalenceComparer();
 
@@ -16,7 +16,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            public bool Equals(ParameterDefinition x, ParameterDefinition y)
+            public bool Equals(ParameterDefinition? x, ParameterDefinition? y)
             {
                 if (x is null || y is null)
                     return ReferenceEquals(x, y);
@@ -24,7 +24,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 return TypeReference.Equals(x.ParameterType, y.ParameterType);
             }
 
-            public int GetHashCode(ParameterDefinition obj)
+            public int GetHashCode(ParameterDefinition? obj)
             {
                 if (obj is null)
                     return 0;

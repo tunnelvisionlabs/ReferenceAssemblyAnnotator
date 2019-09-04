@@ -8,22 +8,22 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        public static IEqualityComparer<MethodDefinition> MethodDefinition
+        public static IEqualityComparer<MethodDefinition?> MethodDefinition
             => MethodDefinitionEquivalenceComparer.Instance;
 
-        public static IEqualityComparer<MethodReturnType> MethodReturnType
+        public static IEqualityComparer<MethodReturnType?> MethodReturnType
             => MethodReturnTypeEquivalenceComparer.Instance;
 
-        public static IEqualityComparer<ParameterDefinition> ParameterDefinition
+        public static IEqualityComparer<ParameterDefinition?> ParameterDefinition
             => ParameterDefinitionEquivalenceComparer.Instance;
 
-        public static IEqualityComparer<PropertyDefinition> PropertyDefinition
+        public static IEqualityComparer<PropertyDefinition?> PropertyDefinition
             => PropertyDefinitionEquivalenceComparer.Instance;
 
-        public static IEqualityComparer<TypeDefinition> TypeDefinition
+        public static IEqualityComparer<TypeDefinition?> TypeDefinition
             => TypeDefinitionEquivalenceComparer.Instance;
 
-        public static IEqualityComparer<TypeReference> TypeReference
+        public static IEqualityComparer<TypeReference?> TypeReference
             => TypeReferenceEquivalenceComparer.Instance;
     }
 }

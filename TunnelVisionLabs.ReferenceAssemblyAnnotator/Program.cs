@@ -13,7 +13,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal class Program
     {
-        internal static void Main(TaskLoggingHelper log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
+        internal static void Main(TaskLoggingHelper? log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(referenceAssembly));
@@ -63,7 +63,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             assemblyDefinition.Write(outputAssembly);
         }
 
-        private static void AnnotateAssembly(TaskLoggingHelper log, AssemblyDefinition assemblyDefinition, AssemblyDefinition annotatedAssemblyDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateAssembly(TaskLoggingHelper? log, AssemblyDefinition assemblyDefinition, AssemblyDefinition annotatedAssemblyDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             Annotate(assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
             if (assemblyDefinition.Modules.Count != 1)
@@ -72,7 +72,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             AnnotateModule(log, assemblyDefinition.MainModule, annotatedAssemblyDefinition.MainModule, attributesOfInterest);
         }
 
-        private static void AnnotateModule(TaskLoggingHelper log, ModuleDefinition moduleDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateModule(TaskLoggingHelper? log, ModuleDefinition moduleDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             Annotate(moduleDefinition, annotatedModuleDefinition, attributesOfInterest);
             foreach (var type in moduleDefinition.GetAllTypes())
@@ -81,7 +81,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static void AnnotateType(TaskLoggingHelper log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateType(TaskLoggingHelper? log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             if (attributesOfInterest.ContainsKey(typeDefinition.FullName))
                 return;
@@ -115,7 +115,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static void AnnotateMethod(TaskLoggingHelper log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateMethod(TaskLoggingHelper? log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             var annotatedMethodDefinition = FindMatchingMethod(log, methodDefinition, annotatedTypeDefinition);
             if (annotatedMethodDefinition is null)
@@ -194,7 +194,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static TypeDefinition FindMatchingType(TaskLoggingHelper log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition)
+        private static TypeDefinition? FindMatchingType(TaskLoggingHelper? log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition)
         {
             if (typeDefinition.IsNested)
             {
@@ -233,7 +233,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             return annotatedTypeDefinition;
         }
 
-        private static MethodDefinition FindMatchingMethod(TaskLoggingHelper log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
+        private static MethodDefinition FindMatchingMethod(TaskLoggingHelper? log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
         {
             try
             {

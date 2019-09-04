@@ -9,7 +9,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static partial class EquivalenceComparers
     {
-        private sealed class TypeReferenceEquivalenceComparer : IEqualityComparer<TypeReference>
+        private sealed class TypeReferenceEquivalenceComparer : IEqualityComparer<TypeReference?>
         {
             public static readonly TypeReferenceEquivalenceComparer Instance = new TypeReferenceEquivalenceComparer();
 
@@ -17,7 +17,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            public bool Equals(TypeReference x, TypeReference y)
+            public bool Equals(TypeReference? x, TypeReference? y)
             {
                 if (x is null || y is null)
                     return ReferenceEquals(x, y);
@@ -66,7 +66,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 return true;
             }
 
-            public int GetHashCode(TypeReference obj)
+            public int GetHashCode(TypeReference? obj)
             {
                 if (obj is null)
                     return 0;

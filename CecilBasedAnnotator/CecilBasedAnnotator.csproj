@@ -9,23 +9,6 @@
     <CodeAnalysisRuleSet>..\TunnelVisionLabs.ReferenceAssemblyAnnotator.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
-  <!-- Enable nullable reference types -->
-  <PropertyGroup>
-    <Nullable>enable</Nullable>
-    <AnnotatedReferenceAssemblyVersion>3.0.0-preview8-28405-07</AnnotatedReferenceAssemblyVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.17" PrivateAssets="all" />
-    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UnannotatedReferenceAssembly Include="mscorlib" />
-    <UnannotatedReferenceAssembly Include="System" />
-    <UnannotatedReferenceAssembly Include="System.Core" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="16.0.461" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.0.461" />
