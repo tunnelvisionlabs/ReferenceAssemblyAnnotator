@@ -76,8 +76,13 @@
   <Target Name="RestoreTargetFrameworkDirectory"
           Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
+    <ItemGroup>
+      <_NuGetPackageFoldersItems Include="$(NuGetPackageFolders)" />
+      <_NetStandardNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_NuGetPackageFoldersItems.Identity)', 'netstandard.library', '$(NETStandardLibraryPackageVersion)', 'build', 'netstandard2.0', 'ref'))" />
+    </ItemGroup>
+
     <PropertyGroup>
-      <TargetFrameworkDirectory>$(NuGetPackageRoot)netstandard.library\$(NETStandardLibraryPackageVersion)\build\netstandard2.0\ref\</TargetFrameworkDirectory>
+      <TargetFrameworkDirectory>@(_NetStandardNuGetPackageFolders)</TargetFrameworkDirectory>
     </PropertyGroup>
   </Target>
 
@@ -118,10 +123,6 @@
       <Reference Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')"
                  Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
     </ItemGroup>
-
-    <PropertyGroup>
-      <TargetFrameworkDirectory>$(NuGetPackageRoot)netstandard.library\$(NETStandardLibraryPackageVersion)\build\netstandard2.0\ref\</TargetFrameworkDirectory>
-    </PropertyGroup>
   </Target>
 
 </Project>
