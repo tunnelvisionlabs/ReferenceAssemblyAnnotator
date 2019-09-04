@@ -6,7 +6,8 @@
   <PropertyGroup>
     <ResolveAssemblyReferencesDependsOn>
       $(ResolveAssemblyReferencesDependsOn);
-      AnnotateReferenceAssemblies
+      AnnotateReferenceAssemblies;
+      UpdateNetStandardAssemblies 
     </ResolveAssemblyReferencesDependsOn>
   </PropertyGroup>
 
@@ -57,6 +58,57 @@
     <PropertyGroup>
       <!-- Add the annotated assembly directory as the first search path -->
       <TargetFrameworkDirectory>$([MSBuild]::NormalizeDirectory('$(AnnotatedReferenceAssemblyOutputPath)'));$(TargetFrameworkDirectory)</TargetFrameworkDirectory>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="RestoreTargetFrameworkDirectory"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
+          BeforeTargets="ResolveAvailableReferenceAssemblies">
+    <PropertyGroup>
+      <TargetFrameworkDirectory>$(NuGetPackageRoot)netstandard.library\$(NETStandardLibraryPackageVersion)\build\netstandard2.0\ref\</TargetFrameworkDirectory>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Automatically annotate mscorlib on .NET Framework -->
+  <Choose>
+    <When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+      <PropertyGroup>
+        <NoStdLib>true</NoStdLib>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <Reference Include="mscorlib" />
+      </ItemGroup>
+
+      <ItemGroup>
+        <UnannotatedReferenceAssembly Include="mscorlib" />
+      </ItemGroup>
+    </When>
+  </Choose>
+
+  <!-- Automatically annotate .NET Standard assemblies -->
+  <Target Name="AddStandardAssembliesForAnnotation"
+          BeforeTargets="ResolveOutputReferenceAssemblies">
+      <ItemGroup>
+        <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
+                                      Condition="'%(Reference.NuGetPackageId)' == 'NETStandard.Library' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
+                                      OriginalReference="%(Reference.Identity)"
+                                      IsNetStandard="True" />
+      </ItemGroup>
+  </Target>
+
+  <Target Name="UpdateNetStandardAssemblies"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
+          DependsOnTargets="AnnotateReferenceAssemblies">
+    <ItemGroup>
+      <Reference Remove="%(UnannotatedReferenceAssembly.OriginalReference)"
+                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
+      <Reference Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')"
+                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <TargetFrameworkDirectory>$(NuGetPackageRoot)netstandard.library\$(NETStandardLibraryPackageVersion)\build\netstandard2.0\ref\</TargetFrameworkDirectory>
     </PropertyGroup>
   </Target>
 
