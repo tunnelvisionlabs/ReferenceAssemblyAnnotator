@@ -58,13 +58,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             if (unannotatedReferenceAssembly is null)
             {
-                Log.LogError("Could not find input reference assembly");
+                Log.LogError($"Could not find input reference assembly '{UnannotatedReferenceAssembly}'");
                 return false;
             }
 
             if (!foundAnnotatedAssembly)
             {
-                Log.LogError("Could not find input annotated reference assembly");
+                Log.LogError($"Could not find input annotated reference assembly for '{UnannotatedReferenceAssembly}'");
                 return false;
             }
 
