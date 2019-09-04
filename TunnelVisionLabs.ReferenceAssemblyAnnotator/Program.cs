@@ -7,17 +7,14 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Microsoft.Build.Utilities;
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
     internal class Program
     {
-        internal static void Main(string[] args)
+        internal static void Main(TaskLoggingHelper log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
         {
-            string referenceAssembly = args[0];
-            string annotatedReferenceAssembly = args[1];
-            string outputAssembly = args[2];
-
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(referenceAssembly));
             using var assemblyDefinition = AssemblyDefinition.ReadAssembly(referenceAssembly, new ReaderParameters(ReadingMode.Immediate) { AssemblyResolver = assemblyResolver });
@@ -61,35 +58,35 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attributesOfInterest.Add(notNullIfNotNullAttribute.FullName, notNullIfNotNullAttribute);
             attributesOfInterest.Add(notNullWhenAttribute.FullName, notNullWhenAttribute);
 
-            AnnotateAssembly(assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
+            AnnotateAssembly(log, assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
 
             assemblyDefinition.Write(outputAssembly);
         }
 
-        private static void AnnotateAssembly(AssemblyDefinition assemblyDefinition, AssemblyDefinition annotatedAssemblyDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateAssembly(TaskLoggingHelper log, AssemblyDefinition assemblyDefinition, AssemblyDefinition annotatedAssemblyDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             Annotate(assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
             if (assemblyDefinition.Modules.Count != 1)
                 throw new NotSupportedException();
 
-            AnnotateModule(assemblyDefinition.MainModule, annotatedAssemblyDefinition.MainModule, attributesOfInterest);
+            AnnotateModule(log, assemblyDefinition.MainModule, annotatedAssemblyDefinition.MainModule, attributesOfInterest);
         }
 
-        private static void AnnotateModule(ModuleDefinition moduleDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateModule(TaskLoggingHelper log, ModuleDefinition moduleDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             Annotate(moduleDefinition, annotatedModuleDefinition, attributesOfInterest);
             foreach (var type in moduleDefinition.GetAllTypes())
             {
-                AnnotateType(type, annotatedModuleDefinition, attributesOfInterest);
+                AnnotateType(log, type, annotatedModuleDefinition, attributesOfInterest);
             }
         }
 
-        private static void AnnotateType(TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateType(TaskLoggingHelper log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
             if (attributesOfInterest.ContainsKey(typeDefinition.FullName))
                 return;
 
-            var annotatedTypeDefinition = FindMatchingType(typeDefinition, annotatedModuleDefinition);
+            var annotatedTypeDefinition = FindMatchingType(log, typeDefinition, annotatedModuleDefinition);
             if (annotatedTypeDefinition is null)
             {
                 return;
@@ -104,7 +101,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             foreach (var method in typeDefinition.Methods)
             {
-                AnnotateMethod(method, annotatedTypeDefinition, attributesOfInterest);
+                AnnotateMethod(log, method, annotatedTypeDefinition, attributesOfInterest);
             }
 
             foreach (var property in typeDefinition.Properties)
@@ -118,9 +115,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static void AnnotateMethod(MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
+        private static void AnnotateMethod(TaskLoggingHelper log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
-            var annotatedMethodDefinition = FindMatchingMethod(methodDefinition, annotatedTypeDefinition);
+            var annotatedMethodDefinition = FindMatchingMethod(log, methodDefinition, annotatedTypeDefinition);
             if (annotatedMethodDefinition is null)
                 return;
 
@@ -197,11 +194,11 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static TypeDefinition FindMatchingType(TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition)
+        private static TypeDefinition FindMatchingType(TaskLoggingHelper log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition)
         {
             if (typeDefinition.IsNested)
             {
-                var declaringAnnotatedType = FindMatchingType(typeDefinition.DeclaringType, annotatedModuleDefinition);
+                var declaringAnnotatedType = FindMatchingType(log, typeDefinition.DeclaringType, annotatedModuleDefinition);
                 if (declaringAnnotatedType is null)
                     return null;
 
@@ -221,8 +218,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                         }
                         catch (AssemblyResolutionException e)
                         {
-                            Console.WriteLine($"Cannot find a matching type for {typeDefinition}");
-                            Console.WriteLine(e.Message);
+                            log?.LogMessage($"Cannot find a matching type for {typeDefinition}");
+                            log?.LogMessage(e.Message);
                         }
 
                         break;
@@ -236,7 +233,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             return annotatedTypeDefinition;
         }
 
-        private static MethodDefinition FindMatchingMethod(MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
+        private static MethodDefinition FindMatchingMethod(TaskLoggingHelper log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
         {
             try
             {
@@ -244,10 +241,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
             catch (InvalidOperationException)
             {
-                Console.WriteLine($"Cannot find a unique match for {methodDefinition}. Candidates:");
+                log?.LogMessage($"Cannot find a unique match for {methodDefinition}. Candidates:");
                 foreach (var candidate in annotatedTypeDefinition.Methods.Where(annotatedMethod => EquivalenceComparers.MethodDefinition.Equals(methodDefinition, annotatedMethod)))
                 {
-                    Console.WriteLine($"  {candidate}");
+                    log?.LogMessage($"  {candidate}");
                 }
 
                 throw;
