@@ -225,7 +225,8 @@
       <Reference Remove="%(UnannotatedReferenceAssembly.OriginalReference)"
                  Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
       <Reference Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')"
-                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
+                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')"
+                 HintPath="" />
     </ItemGroup>
   </Target>
 
