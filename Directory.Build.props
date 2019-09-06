@@ -31,7 +31,7 @@
 
   <!-- Use the 16.3 compiler -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.Net.Compilers" Version="3.3.0-beta2-final" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Net.Compilers" Version="3.3.1-beta3-final" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Enable nullable reference types -->
