@@ -158,6 +158,20 @@
   <!-- Automatically annotate .NET Standard assemblies -->
   <Target Name="AddStandardAssembliesForAnnotation"
           BeforeTargets="ResolveOutputReferenceAssemblies">
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+      <UnannotatedReferenceAssembly Include="%(Reference.Identity)"
+                                    Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.Identity).dll')
+                                      AND ('%(Reference.Identity)' == 'System'
+                                        OR '%(Reference.Identity)' == 'System.Core'
+                                        OR '%(Reference.Identity)' == 'System.Data'
+                                        OR '%(Reference.Identity)' == 'System.Drawing'
+                                        OR '%(Reference.Identity)' == 'System.IO.Compression.FileSystem'
+                                        OR '%(Reference.Identity)' == 'System.Numerics'
+                                        OR '%(Reference.Identity)' == 'System.Runtime.Serialization'
+                                        OR '%(Reference.Identity)' == 'System.Xml'
+                                        OR '%(Reference.Identity)' == 'System.Xml.Linq')" />
+    </ItemGroup>
+
     <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' == ''">
       <!-- .NET Standard 1.x -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
