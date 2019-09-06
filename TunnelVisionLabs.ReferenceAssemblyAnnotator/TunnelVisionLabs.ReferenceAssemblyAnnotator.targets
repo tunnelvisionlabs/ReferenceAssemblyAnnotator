@@ -19,7 +19,7 @@
     <ResolveAssemblyReferencesDependsOn>
       $(ResolveAssemblyReferencesDependsOn);
       AnnotateReferenceAssemblies;
-      UpdateNetStandardAssemblies 
+      UpdateNetStandardAssemblies
     </ResolveAssemblyReferencesDependsOn>
   </PropertyGroup>
 
@@ -74,7 +74,7 @@
   </Target>
 
   <Target Name="RestoreTargetFrameworkDirectory"
-          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
     <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' == ''">
       <!-- .NET Standard 1.x -->
@@ -219,7 +219,7 @@
   </Target>
 
   <Target Name="UpdateNetStandardAssemblies"
-          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
           DependsOnTargets="AnnotateReferenceAssemblies">
     <ItemGroup>
       <Reference Remove="%(UnannotatedReferenceAssembly.OriginalReference)"
