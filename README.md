@@ -20,6 +20,15 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
 
 * .NET Framework targets
     * mscorlib
+    * System
+    * System.Core
+    * System.Data
+    * System.Drawing
+    * System.IO.Compression.FileSystem
+    * System.Numerics
+    * System.Runtime.Serialization
+    * System.Xml
+    * System.Xml.Linq
 * .NET Standard targets
     * All assemblies which are defined by the .NET Standard
 
@@ -28,9 +37,9 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
 ```xml
 <PropertyGroup>
   <!-- Specifies the version of this rewriter to use -->
-  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.31</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
+  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.50</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
   <!-- Specifies the version of Microsoft.NETCore.App.Ref to obtain nullability information from -->
-  <AnnotatedReferenceAssemblyVersion>3.0.0-preview8-28405-07</AnnotatedReferenceAssemblyVersion>
+  <AnnotatedReferenceAssemblyVersion>3.0.0-preview9-19423-09</AnnotatedReferenceAssemblyVersion>
   <!-- Includes the nullable attributes from dotnet/coreclr as source code with 'internal' accessibility. Set this to
        false if the attributes are included from another source and/or are not needed. -->
   <GenerateNullableAttributes>true</GenerateNullableAttributes>
@@ -41,13 +50,15 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
   <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="$(TunnelVisionLabsReferenceAssemblyAnnotatorVersion)" PrivateAssets="all" />
   <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
 </ItemGroup>
-
-<ItemGroup>
-  <!-- Specifies the reference assemblies to rewrite -->
-  <UnannotatedReferenceAssembly Include="System" />
-  <UnannotatedReferenceAssembly Include="System.Core" />
-</ItemGroup>
 ```
+
+### Configuration reference
+
+* MSBuild properties
+    * `<AnnotatedReferenceAssemblyVersion>`: Specifies the version of Microsoft.NETCore.App.Ref to obtain nullability information from. There is no default value, so this must be specified by the user.
+    * `<GenerateNullableAttributes>`: Set to `True` to include definitions of nullability attributes in the build; otherwise, `False` to exclude the definitions. The default value is `True`.
+* MSBuild items
+    * `<UnannotatedReferenceAssembly>`: Specifies reference assemblies to annotate. This is only required for assemblies that are not automatically annotated by this package.
 
 ## Releases
 
