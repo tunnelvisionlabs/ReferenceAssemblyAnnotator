@@ -37,7 +37,7 @@
   <!-- Enable nullable reference types -->
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <AnnotatedReferenceAssemblyVersion>3.0.0-preview8-28405-07</AnnotatedReferenceAssemblyVersion>
+    <AnnotatedReferenceAssemblyVersion>3.0.0-preview9-19423-09</AnnotatedReferenceAssemblyVersion>
     <GenerateNullableAttributes>false</GenerateNullableAttributes>
   </PropertyGroup>
 
