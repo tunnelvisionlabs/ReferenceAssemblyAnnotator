@@ -4,13 +4,12 @@
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using Mono.Cecil;
-    using Mono.Cecil.Cil;
 
     internal static class TypeDefinitionExtensions
     {
-        public static MethodDefinition AddDefaultConstructor(this TypeDefinition typeDefinition, WellKnownTypes wellKnownTypes)
+        public static MethodDefinition AddDefaultConstructor(this TypeDefinition typeDefinition, TypeSystem typeSystem)
         {
-            MethodDefinition constructor = MethodFactory.DefaultConstructor(wellKnownTypes);
+            MethodDefinition constructor = MethodFactory.DefaultConstructor(typeSystem);
             typeDefinition.Methods.Add(constructor);
             return constructor;
         }

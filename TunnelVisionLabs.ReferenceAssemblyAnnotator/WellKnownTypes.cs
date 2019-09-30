@@ -9,15 +9,19 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal class WellKnownTypes
     {
-        public WellKnownTypes(ModuleDefinition module)
+        public WellKnownTypes(AssemblyDefinition assemblyDefinition, Func<AssemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute), TypeDefinition> defineReferenceAssemblyAttribute)
         {
-            Module = module;
+            Module = assemblyDefinition.MainModule;
 
-            SystemAttribute = ResolveRequiredWellKnownType(module, typeof(Attribute));
-            SystemAttributeTargets = ResolveRequiredWellKnownType(module, typeof(AttributeTargets));
-            SystemAttributeUsageAttribute = ResolveRequiredWellKnownType(module, typeof(AttributeUsageAttribute));
-            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveRequiredWellKnownType(module, typeof(CompilerGeneratedAttribute));
-            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(module, typeof(ReferenceAssemblyAttribute));
+            SystemAttribute = ResolveRequiredWellKnownType(Module, typeof(Attribute));
+            SystemAttributeTargets = ResolveRequiredWellKnownType(Module, typeof(AttributeTargets));
+            SystemAttributeUsageAttribute = ResolveRequiredWellKnownType(Module, typeof(AttributeUsageAttribute));
+            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveRequiredWellKnownType(Module, typeof(CompilerGeneratedAttribute));
+
+            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(Module, typeof(ReferenceAssemblyAttribute))
+                ?? defineReferenceAssemblyAttribute(
+                    assemblyDefinition,
+                    (systemAttribute: SystemAttribute, systemRuntimeCompilerServicesCompilerGeneratedAttribute: SystemRuntimeCompilerServicesCompilerGeneratedAttribute));
         }
 
         public ModuleDefinition Module { get; }
@@ -32,7 +36,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
 
-        public TypeReference? SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
+        public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
 
         private static TypeDefinition ResolveRequiredWellKnownType(ModuleDefinition module, Type type)
         {

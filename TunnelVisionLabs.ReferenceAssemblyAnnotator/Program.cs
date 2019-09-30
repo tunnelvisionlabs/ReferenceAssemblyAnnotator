@@ -33,7 +33,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             annotatedAssemblyResolver.AddSearchDirectory(Path.GetDirectoryName(annotatedReferenceAssembly));
             using var annotatedAssemblyDefinition = AssemblyDefinition.ReadAssembly(annotatedReferenceAssembly, new ReaderParameters(ReadingMode.Immediate) { AssemblyResolver = annotatedAssemblyResolver });
 
-            var wellKnownTypes = new WellKnownTypes(assemblyDefinition.MainModule);
+            var wellKnownTypes = new WellKnownTypes(assemblyDefinition, DefineReferenceAssemblyAttribute);
 
             // Define embedded types used by the compiler
             var embeddedAttribute = DefineEmbeddedAttribute(assemblyDefinition, wellKnownTypes);
@@ -292,10 +292,30 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            var constructor = attribute.AddDefaultConstructor(wellKnownTypes);
+            var constructor = attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
 
             MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
             var customAttribute = new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor));
+            attribute.CustomAttributes.Add(customAttribute);
+            attribute.CustomAttributes.Add(new CustomAttribute(constructor));
+
+            assemblyDefinition.MainModule.Types.Add(attribute);
+
+            return attribute;
+        }
+
+        private static TypeDefinition DefineReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute) wellKnownTypes)
+        {
+            var attribute = new TypeDefinition(
+                @namespace: "System.Runtime.CompilerServices",
+                name: "ReferenceAssemblyAttribute",
+                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
+                assemblyDefinition.MainModule.ImportReference(wellKnownTypes.systemAttribute));
+
+            var constructor = attribute.AddDefaultConstructor(assemblyDefinition.MainModule.TypeSystem);
+
+            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.systemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
+            var customAttribute = new CustomAttribute(assemblyDefinition.MainModule.ImportReference(compilerGeneratedConstructor));
             attribute.CustomAttributes.Add(customAttribute);
             attribute.CustomAttributes.Add(new CustomAttribute(constructor));
 
@@ -316,10 +336,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
             attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
 
-            var constructorByte = MethodFactory.Constructor(wellKnownTypes);
+            var constructorByte = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructorByte.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Byte));
 
-            var constructorByteArray = MethodFactory.Constructor(wellKnownTypes);
+            var constructorByteArray = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructorByteArray.Parameters.Add(new ParameterDefinition(new ArrayType(wellKnownTypes.TypeSystem.Byte)));
 
             attribute.Methods.Add(constructorByte);
@@ -342,7 +362,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
             attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Byte));
             attribute.Methods.Add(constructor);
 
@@ -363,7 +383,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
             attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Boolean));
             attribute.Methods.Add(constructor);
 
@@ -380,7 +400,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            attribute.AddDefaultConstructor(wellKnownTypes);
+            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, inherited: false));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
@@ -396,7 +416,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            attribute.AddDefaultConstructor(wellKnownTypes);
+            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, inherited: false));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
@@ -412,7 +432,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            attribute.AddDefaultConstructor(wellKnownTypes);
+            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Method, inherited: false));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
@@ -428,7 +448,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
             attribute.Methods.Add(constructor);
 
@@ -447,7 +467,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            attribute.AddDefaultConstructor(wellKnownTypes);
+            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, inherited: false));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
@@ -463,7 +483,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition("returnValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
             attribute.Methods.Add(constructor);
 
@@ -482,7 +502,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            attribute.AddDefaultConstructor(wellKnownTypes);
+            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, inherited: false));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
@@ -502,7 +522,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attribute.CustomAttributes.Add(attributeFactory.Nullable(0));
             attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.ReturnValue, allowMultiple: true, inherited: false));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition("parameterName", ParameterAttributes.None, wellKnownTypes.TypeSystem.String));
             attribute.Methods.Add(constructor);
 
@@ -519,7 +539,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-            var constructor = MethodFactory.Constructor(wellKnownTypes);
+            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
             constructor.Parameters.Add(new ParameterDefinition("returnValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
             attribute.Methods.Add(constructor);
 
@@ -541,9 +561,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
 
             var customAttribute = attributeFactory.ReferenceAssembly();
-            if (customAttribute is null)
-                return;
-
             assemblyDefinition.CustomAttributes.Add(customAttribute);
         }
     }
