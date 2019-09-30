@@ -106,7 +106,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
 
             Annotate(typeDefinition, annotatedTypeDefinition, attributesOfInterest);
-            for (var i = 0; i < typeDefinition.Interfaces.Count; i++)
+            for (int i = 0; i < typeDefinition.Interfaces.Count; i++)
             {
                 for (int j = 0; j < annotatedTypeDefinition.Interfaces.Count; j++)
                 {
@@ -117,7 +117,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 }
             }
 
-            for (var i = 0; i < typeDefinition.GenericParameters.Count; i++)
+            for (int i = 0; i < typeDefinition.GenericParameters.Count; i++)
             {
                 Annotate(typeDefinition.GenericParameters[i], annotatedTypeDefinition.GenericParameters[i], attributesOfInterest);
             }
@@ -194,7 +194,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                     continue;
 
                 var newCustomAttribute = new CustomAttribute(constructor);
-                for (var i = 0; i < customAttribute.ConstructorArguments.Count; i++)
+                for (int i = 0; i < customAttribute.ConstructorArguments.Count; i++)
                 {
                     newCustomAttribute.ConstructorArguments.Add(new CustomAttributeArgument(constructor.Parameters[i].ParameterType, customAttribute.ConstructorArguments[i].Value));
                 }
