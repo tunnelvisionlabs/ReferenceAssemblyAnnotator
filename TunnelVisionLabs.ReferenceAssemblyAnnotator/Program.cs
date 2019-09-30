@@ -106,6 +106,16 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
 
             Annotate(typeDefinition, annotatedTypeDefinition, attributesOfInterest);
+            for (var i = 0; i < typeDefinition.Interfaces.Count; i++)
+            {
+                for (int j = 0; j < annotatedTypeDefinition.Interfaces.Count; j++)
+                {
+                    if (EquivalenceComparers.TypeReference.Equals(typeDefinition.Interfaces[i].InterfaceType, annotatedTypeDefinition.Interfaces[j].InterfaceType))
+                    {
+                        Annotate(typeDefinition.Interfaces[i], annotatedTypeDefinition.Interfaces[j], attributesOfInterest);
+                    }
+                }
+            }
 
             for (var i = 0; i < typeDefinition.GenericParameters.Count; i++)
             {
