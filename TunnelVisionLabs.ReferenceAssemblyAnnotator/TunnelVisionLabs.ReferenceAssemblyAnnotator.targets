@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <AnnotatedReferenceAssemblyDirectory Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">$(NuGetPackageRoot)microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\netcoreapp3.0\</AnnotatedReferenceAssemblyDirectory>
+    <AnnotatedReferenceAssemblyDirectory Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">$(NuGetPackageRoot)\microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\netcoreapp3.0\</AnnotatedReferenceAssemblyDirectory>
   </PropertyGroup>
 
   <ItemGroup>
