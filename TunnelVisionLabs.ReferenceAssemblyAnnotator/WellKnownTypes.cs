@@ -17,6 +17,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             SystemAttributeTargets = ResolveWellKnownType(module, typeof(AttributeTargets));
             SystemAttributeUsageAttribute = ResolveWellKnownType(module, typeof(AttributeUsageAttribute));
             SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveWellKnownType(module, typeof(CompilerGeneratedAttribute));
+            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(module, typeof(ReferenceAssemblyAttribute));
         }
 
         public ModuleDefinition Module { get; }
@@ -30,6 +31,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         public TypeReference SystemAttributeUsageAttribute { get; }
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
+
+        public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
 
         private static TypeDefinition ResolveWellKnownType(ModuleDefinition module, Type type)
         {

@@ -7,6 +7,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using Microsoft.Build.Utilities;
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
@@ -43,6 +44,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             var notNullAttribute = DefineNotNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
             var notNullIfNotNullAttribute = DefineNotNullIfNotNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
             var notNullWhenAttribute = DefineNotNullWhenAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
+
+            // Ensure the assembly is marked with ReferenceAssemblyAttribute
+            EnsureReferenceAssemblyAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
 
             var attributesOfInterest = new Dictionary<string, TypeDefinition>();
             attributesOfInterest.Add(nullableAttribute.FullName, nullableAttribute);
@@ -505,6 +509,20 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             assemblyDefinition.MainModule.Types.Add(attribute);
 
             return attribute;
+        }
+
+        private static void EnsureReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+        {
+            foreach (var attribute in assemblyDefinition.CustomAttributes)
+            {
+                if (attribute.AttributeType.FullName == typeof(ReferenceAssemblyAttribute).FullName)
+                {
+                    return;
+                }
+            }
+
+            var customAttribute = attributeFactory.ReferenceAssembly();
+            assemblyDefinition.CustomAttributes.Add(customAttribute);
         }
     }
 }
