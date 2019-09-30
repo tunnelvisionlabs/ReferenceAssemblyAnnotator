@@ -55,6 +55,8 @@
           Inputs="@(AvailableUnannotatedReferenceAssembly);@(AnnotatedReferenceAssembly)"
           Outputs="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')">
 
+    <Error Condition="'$(AnnotatedReferenceAssemblyVersion)' == ''" Text="The 'AnnotatedReferenceAssemblyVersion' build property was not set." Code="RA0000" />
+
     <AnnotatorBuildTask
       UnannotatedReferenceAssembly="%(UnannotatedReferenceAssembly.Identity)"
       TargetFrameworkDirectories="@(AvailableUnannotatedReferenceAssemblyDirectory)"

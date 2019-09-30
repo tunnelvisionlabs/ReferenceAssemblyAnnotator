@@ -57,8 +57,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public override bool Execute()
         {
-            var unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
-            var annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
+            string unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
+            string annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
             bool foundAnnotatedAssembly = File.Exists(annotatedReferenceAssembly);
 
             Log.LogMessage($"Generating reference assembly for {UnannotatedReferenceAssembly}");
@@ -79,7 +79,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
 
             Directory.CreateDirectory(OutputPath);
-            var outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
+            string outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
             Program.Main(Log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
             GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
 

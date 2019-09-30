@@ -8,12 +8,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal static class MethodFactory
     {
-        public static MethodDefinition DefaultConstructor(WellKnownTypes wellKnownTypes)
-            => Constructor(wellKnownTypes);
+        public static MethodDefinition DefaultConstructor(TypeSystem typeSystem)
+            => Constructor(typeSystem);
 
-        public static MethodDefinition Constructor(WellKnownTypes wellKnownTypes)
+        public static MethodDefinition Constructor(TypeSystem typeSystem)
         {
-            var constructor = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, wellKnownTypes.TypeSystem.Void);
+            var constructor = new MethodDefinition(".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, typeSystem.Void);
             constructor.Body = new MethodBody(constructor)
             {
                 Instructions =

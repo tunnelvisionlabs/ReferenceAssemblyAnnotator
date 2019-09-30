@@ -37,12 +37,12 @@
   <!-- Enable nullable reference types -->
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <AnnotatedReferenceAssemblyVersion>3.0.0-preview9-19423-09</AnnotatedReferenceAssemblyVersion>
+    <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
     <GenerateNullableAttributes>false</GenerateNullableAttributes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.31" PrivateAssets="all" />
+    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.53" PrivateAssets="all" />
     <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
   </ItemGroup>
 

@@ -9,14 +9,19 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal class WellKnownTypes
     {
-        public WellKnownTypes(ModuleDefinition module)
+        public WellKnownTypes(AssemblyDefinition assemblyDefinition, Func<AssemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute), TypeDefinition> defineReferenceAssemblyAttribute)
         {
-            Module = module;
+            Module = assemblyDefinition.MainModule;
 
-            SystemAttribute = ResolveWellKnownType(module, typeof(Attribute));
-            SystemAttributeTargets = ResolveWellKnownType(module, typeof(AttributeTargets));
-            SystemAttributeUsageAttribute = ResolveWellKnownType(module, typeof(AttributeUsageAttribute));
-            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveWellKnownType(module, typeof(CompilerGeneratedAttribute));
+            SystemAttribute = ResolveRequiredWellKnownType(Module, typeof(Attribute));
+            SystemAttributeTargets = ResolveRequiredWellKnownType(Module, typeof(AttributeTargets));
+            SystemAttributeUsageAttribute = ResolveRequiredWellKnownType(Module, typeof(AttributeUsageAttribute));
+            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveRequiredWellKnownType(Module, typeof(CompilerGeneratedAttribute));
+
+            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(Module, typeof(ReferenceAssemblyAttribute))
+                ?? defineReferenceAssemblyAttribute(
+                    assemblyDefinition,
+                    (systemAttribute: SystemAttribute, systemRuntimeCompilerServicesCompilerGeneratedAttribute: SystemRuntimeCompilerServicesCompilerGeneratedAttribute));
         }
 
         public ModuleDefinition Module { get; }
@@ -31,7 +36,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
 
-        private static TypeDefinition ResolveWellKnownType(ModuleDefinition module, Type type)
+        public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
+
+        private static TypeDefinition ResolveRequiredWellKnownType(ModuleDefinition module, Type type)
+        {
+            return ResolveWellKnownType(module, type)
+                ?? throw new NotSupportedException($"Failed to resolve type '{type.FullName}'");
+        }
+
+        private static TypeDefinition? ResolveWellKnownType(ModuleDefinition module, Type type)
         {
             return module.TypeSystem.Object.Resolve().Module.GetType(type.FullName);
         }
