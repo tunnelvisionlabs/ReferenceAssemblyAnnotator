@@ -317,7 +317,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             MethodDefinition compilerGeneratedConstructor = wellKnownTypes.systemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
             var customAttribute = new CustomAttribute(assemblyDefinition.MainModule.ImportReference(compilerGeneratedConstructor));
             attribute.CustomAttributes.Add(customAttribute);
-            attribute.CustomAttributes.Add(new CustomAttribute(constructor));
 
             assemblyDefinition.MainModule.Types.Add(attribute);
 
