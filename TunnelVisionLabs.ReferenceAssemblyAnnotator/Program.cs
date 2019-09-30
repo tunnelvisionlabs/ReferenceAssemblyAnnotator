@@ -14,7 +14,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal class Program
     {
-        internal static void Main(TaskLoggingHelper? log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
+        internal static void Main(SuppressibleLoggingHelper? log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
         {
             var assemblyResolver = new DefaultAssemblyResolver();
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(referenceAssembly));
@@ -24,7 +24,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
                 if (!module.Attributes.HasFlag(ModuleAttributes.ILOnly))
                 {
-                    log?.LogWarning(subcategory: null, "RA1000", helpKeyword: null, file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0, "Skipping mixed-mode implementation assembly '{0}'", assemblyDefinition.Name);
+                    log?.LogWarning("RA1000", "Skipping mixed-mode implementation assembly '{0}'", assemblyDefinition.Name);
                     return;
                 }
             }
@@ -71,7 +71,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attributesOfInterest.Add(notNullIfNotNullAttribute.FullName, notNullIfNotNullAttribute);
             attributesOfInterest.Add(notNullWhenAttribute.FullName, notNullWhenAttribute);
 
-            AnnotateAssembly(log, assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
+            AnnotateAssembly(log?.Helper, assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
 
             assemblyDefinition.Write(outputAssembly);
         }
