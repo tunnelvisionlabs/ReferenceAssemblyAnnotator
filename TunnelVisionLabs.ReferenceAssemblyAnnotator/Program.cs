@@ -541,6 +541,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
 
             var customAttribute = attributeFactory.ReferenceAssembly();
+            if (customAttribute is null)
+                return;
+
             assemblyDefinition.CustomAttributes.Add(customAttribute);
         }
     }

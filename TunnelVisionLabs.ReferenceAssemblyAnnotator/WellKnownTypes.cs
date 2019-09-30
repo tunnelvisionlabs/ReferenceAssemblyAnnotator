@@ -13,10 +13,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         {
             Module = module;
 
-            SystemAttribute = ResolveWellKnownType(module, typeof(Attribute));
-            SystemAttributeTargets = ResolveWellKnownType(module, typeof(AttributeTargets));
-            SystemAttributeUsageAttribute = ResolveWellKnownType(module, typeof(AttributeUsageAttribute));
-            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveWellKnownType(module, typeof(CompilerGeneratedAttribute));
+            SystemAttribute = ResolveRequiredWellKnownType(module, typeof(Attribute));
+            SystemAttributeTargets = ResolveRequiredWellKnownType(module, typeof(AttributeTargets));
+            SystemAttributeUsageAttribute = ResolveRequiredWellKnownType(module, typeof(AttributeUsageAttribute));
+            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveRequiredWellKnownType(module, typeof(CompilerGeneratedAttribute));
             SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(module, typeof(ReferenceAssemblyAttribute));
         }
 
@@ -32,9 +32,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
 
-        public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
+        public TypeReference? SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
 
-        private static TypeDefinition ResolveWellKnownType(ModuleDefinition module, Type type)
+        private static TypeDefinition ResolveRequiredWellKnownType(ModuleDefinition module, Type type)
+        {
+            return ResolveWellKnownType(module, type)
+                ?? throw new NotSupportedException($"Failed to resolve type '{type.FullName}'");
+        }
+
+        private static TypeDefinition? ResolveWellKnownType(ModuleDefinition module, Type type)
         {
             return module.TypeSystem.Object.Resolve().Module.GetType(type.FullName);
         }

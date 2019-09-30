@@ -77,9 +77,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             return customAttribute;
         }
 
-        public CustomAttribute ReferenceAssembly()
+        public CustomAttribute? ReferenceAssembly()
         {
-            MethodDefinition constructor = _wellKnownTypes.SystemRuntimeCompilerServicesReferenceAssemblyAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
+            MethodDefinition? constructor = _wellKnownTypes.SystemRuntimeCompilerServicesReferenceAssemblyAttribute?.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
+            if (constructor is null)
+                return null;
+
             var customAttribute = new CustomAttribute(_wellKnownTypes.Module.ImportReference(constructor));
             return customAttribute;
         }
