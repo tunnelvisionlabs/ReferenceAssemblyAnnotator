@@ -55,7 +55,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             var notNullWhenAttribute = DefineNotNullWhenAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
 
             // Ensure the assembly is marked with ReferenceAssemblyAttribute
-            EnsureReferenceAssemblyAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
+            EnsureReferenceAssemblyAttribute(assemblyDefinition, attributeFactory);
 
             var attributesOfInterest = new Dictionary<string, TypeDefinition>();
             attributesOfInterest.Add(nullableAttribute.FullName, nullableAttribute);
@@ -550,7 +550,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             return attribute;
         }
 
-        private static void EnsureReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+        private static void EnsureReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, CustomAttributeFactory attributeFactory)
         {
             foreach (var attribute in assemblyDefinition.CustomAttributes)
             {
