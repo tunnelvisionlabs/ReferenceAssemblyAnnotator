@@ -20,6 +20,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(referenceAssembly));
             using var assemblyDefinition = AssemblyDefinition.ReadAssembly(referenceAssembly, new ReaderParameters(ReadingMode.Immediate) { AssemblyResolver = assemblyResolver });
 
+            foreach (var module in assemblyDefinition.Modules)
+            {
+                if (!module.Attributes.HasFlag(ModuleAttributes.ILOnly))
+                {
+                    log?.LogWarning(subcategory: null, "RA1000", helpKeyword: null, file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0, "Skipping mixed-mode implementation assembly '{0}'", assemblyDefinition.Name);
+                    return;
+                }
+            }
+
             var annotatedAssemblyResolver = new DefaultAssemblyResolver();
             annotatedAssemblyResolver.AddSearchDirectory(Path.GetDirectoryName(annotatedReferenceAssembly));
             using var annotatedAssemblyDefinition = AssemblyDefinition.ReadAssembly(annotatedReferenceAssembly, new ReaderParameters(ReadingMode.Immediate) { AssemblyResolver = annotatedAssemblyResolver });
