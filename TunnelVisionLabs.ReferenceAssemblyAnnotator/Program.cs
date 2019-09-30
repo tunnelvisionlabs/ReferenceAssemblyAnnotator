@@ -312,7 +312,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                 assemblyDefinition.MainModule.ImportReference(wellKnownTypes.systemAttribute));
 
-            var constructor = attribute.AddDefaultConstructor(assemblyDefinition.MainModule.TypeSystem);
+            attribute.AddDefaultConstructor(assemblyDefinition.MainModule.TypeSystem);
 
             MethodDefinition compilerGeneratedConstructor = wellKnownTypes.systemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
             var customAttribute = new CustomAttribute(assemblyDefinition.MainModule.ImportReference(compilerGeneratedConstructor));
