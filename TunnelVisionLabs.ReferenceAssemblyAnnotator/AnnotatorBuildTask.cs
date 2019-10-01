@@ -3,6 +3,7 @@
 
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
+    using System;
     using System.IO;
     using System.Linq;
     using Microsoft.Build.Framework;
@@ -55,7 +56,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
-        public string[]? NoWarn
+        public string? NoWarn
         {
             get;
             set;

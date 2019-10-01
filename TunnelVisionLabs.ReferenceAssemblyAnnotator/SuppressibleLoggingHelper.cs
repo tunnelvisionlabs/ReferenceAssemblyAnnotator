@@ -4,18 +4,23 @@
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.Immutable;
+    using System.Linq;
     using Microsoft.Build.Utilities;
 
     internal readonly struct SuppressibleLoggingHelper
     {
         private readonly ImmutableHashSet<string> _noWarn;
 
-        public SuppressibleLoggingHelper(TaskLoggingHelper helper, IEnumerable<string>? noWarn)
+        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string? noWarn)
         {
             Helper = helper;
-            _noWarn = noWarn?.ToImmutableHashSet(StringComparer.OrdinalIgnoreCase) ?? ImmutableHashSet<string>.Empty;
+
+            _noWarn = noWarn
+                ?.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(item => item.Trim())
+                .Where(item => item.Length != 0)
+                .ToImmutableHashSet(StringComparer.OrdinalIgnoreCase) ?? ImmutableHashSet<string>.Empty;
         }
 
         public TaskLoggingHelper Helper { get; }
