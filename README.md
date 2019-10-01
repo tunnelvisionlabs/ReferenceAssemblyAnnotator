@@ -37,16 +37,15 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
 ```xml
 <PropertyGroup>
   <!-- Specifies the version of this rewriter to use -->
-  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.50</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
+  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.77</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
   <!-- Specifies the version of Microsoft.NETCore.App.Ref to obtain nullability information from -->
-  <AnnotatedReferenceAssemblyVersion>3.0.0-preview9-19423-09</AnnotatedReferenceAssemblyVersion>
+  <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
   <!-- Includes the nullable attributes from dotnet/coreclr as source code with 'internal' accessibility. Set this to
        false if the attributes are included from another source and/or are not needed. -->
   <GenerateNullableAttributes>true</GenerateNullableAttributes>
 </PropertyGroup>
 
 <ItemGroup>
-  <!-- Include the necessary packages -->
   <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="$(TunnelVisionLabsReferenceAssemblyAnnotatorVersion)" PrivateAssets="all" />
   <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
 </ItemGroup>
