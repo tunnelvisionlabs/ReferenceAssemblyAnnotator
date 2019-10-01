@@ -69,6 +69,10 @@
     <Copyright>Copyright © Tunnel Vision Laboratories, LLC 2019</Copyright>
     <NeutralLanguage>en-US</NeutralLanguage>
     <Authors>sharwell</Authors>
+    <PackageProjectUrl>https://github.com/tunnelvisionlabs/ReferenceAssemblyAnnotator</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/tunnelvisionlabs/ReferenceAssemblyAnnotator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
 
     <IncludeSymbols>true</IncludeSymbols>
     <IncludeSource>true</IncludeSource>
