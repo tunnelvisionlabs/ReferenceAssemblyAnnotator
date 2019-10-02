@@ -19,6 +19,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             TargetFrameworkDirectories = null!;
             AnnotatedReferenceAssemblyDirectory = null!;
             OutputPath = null!;
+            NoWarn = null!;
         }
 
         [Required]
@@ -49,14 +50,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
-        [Output]
-        public ITaskItem[]? GeneratedAssemblies
+        [Required]
+        public string NoWarn
         {
             get;
             set;
         }
 
-        public string? NoWarn
+        [Output]
+        public ITaskItem[]? GeneratedAssemblies
         {
             get;
             set;

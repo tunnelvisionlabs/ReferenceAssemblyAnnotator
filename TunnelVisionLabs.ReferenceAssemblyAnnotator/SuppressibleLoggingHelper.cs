@@ -13,7 +13,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly ImmutableHashSet<string> _noWarn;
         private readonly string _requiredPrefix;
 
-        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string? noWarn)
+        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string noWarn)
         {
             if (string.IsNullOrWhiteSpace(requiredPrefix))
                 throw new ArgumentException("A required warning prefix must be supplied.", nameof(requiredPrefix));
@@ -23,10 +23,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             Helper = helper;
 
             _noWarn = noWarn
-                ?.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(item => item.Trim())
                 .Where(item => item.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
-                .ToImmutableHashSet(StringComparer.OrdinalIgnoreCase) ?? ImmutableHashSet<string>.Empty;
+                .ToImmutableHashSet(StringComparer.OrdinalIgnoreCase);
         }
 
         public TaskLoggingHelper Helper { get; }
