@@ -64,7 +64,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public override bool Execute()
         {
-            var log = new SuppressibleLoggingHelper(Log, NoWarn);
+            var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", NoWarn);
 
             string unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
             string annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
