@@ -26,13 +26,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             _disabledWarnings = disabledWarnings
                 .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(item => item.Trim())
-                .Where(item => item.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
-                .ToImmutableHashSet(StringComparer.OrdinalIgnoreCase);
+                .Where(item => item.StartsWith(requiredPrefix, StringComparison.Ordinal))
+                .ToImmutableHashSet(StringComparer.Ordinal);
         }
 
         public void LogWarning(string warningCode, string message, params object?[] messageArgs)
         {
-            if (!warningCode.StartsWith(_requiredPrefix, StringComparison.OrdinalIgnoreCase))
+            if (!warningCode.StartsWith(_requiredPrefix, StringComparison.Ordinal))
                 throw new ArgumentException($"Warning code '{warningCode}' does not begin with the required prefix '{_requiredPrefix}'.", nameof(warningCode));
 
             if (_disabledWarnings.Contains(warningCode))
