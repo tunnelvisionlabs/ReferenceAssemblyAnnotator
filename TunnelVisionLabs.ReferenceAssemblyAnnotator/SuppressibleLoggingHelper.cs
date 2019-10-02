@@ -10,10 +10,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal readonly struct SuppressibleLoggingHelper
     {
-        private readonly ImmutableHashSet<string> _noWarn;
+        private readonly ImmutableHashSet<string> _disabledWarnings;
         private readonly string _requiredPrefix;
 
-        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string noWarn)
+        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string disabledWarnings)
         {
             if (string.IsNullOrWhiteSpace(requiredPrefix))
                 throw new ArgumentException("A required warning prefix must be supplied.", nameof(requiredPrefix));
@@ -22,7 +22,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             Helper = helper;
 
-            _noWarn = noWarn
+            _disabledWarnings = disabledWarnings
                 .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(item => item.Trim())
                 .Where(item => item.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
@@ -36,7 +36,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             if (!warningCode.StartsWith(_requiredPrefix, StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"Warning code '{warningCode}' does not begin with the required prefix '{_requiredPrefix}'.", nameof(warningCode));
 
-            if (_noWarn.Contains(warningCode))
+            if (_disabledWarnings.Contains(warningCode))
                 return;
 
             Helper.LogWarning(subcategory: null, warningCode, helpKeyword: null, file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0, message, messageArgs);

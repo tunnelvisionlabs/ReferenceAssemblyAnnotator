@@ -62,7 +62,7 @@
       TargetFrameworkDirectories="@(AvailableUnannotatedReferenceAssemblyDirectory)"
       AnnotatedReferenceAssemblyDirectory="$(AnnotatedReferenceAssemblyDirectory)"
       OutputPath="$(AnnotatedReferenceAssemblyOutputPath)"
-      NoWarn="$(NoWarn)">
+      DisabledWarnings="$(NoWarn)">
       <Output ItemName="GeneratedReferenceAssemblies" TaskParameter="GeneratedAssemblies" />
     </AnnotatorBuildTask>
 

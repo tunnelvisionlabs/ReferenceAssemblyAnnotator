@@ -19,7 +19,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             TargetFrameworkDirectories = null!;
             AnnotatedReferenceAssemblyDirectory = null!;
             OutputPath = null!;
-            NoWarn = null!;
+            DisabledWarnings = null!;
         }
 
         [Required]
@@ -51,7 +51,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         }
 
         [Required]
-        public string NoWarn
+        public string DisabledWarnings
         {
             get;
             set;
@@ -66,7 +66,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public override bool Execute()
         {
-            var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", NoWarn);
+            var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", DisabledWarnings);
 
             string unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
             string annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
