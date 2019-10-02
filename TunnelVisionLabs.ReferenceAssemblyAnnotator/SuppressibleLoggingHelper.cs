@@ -10,17 +10,18 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal readonly struct SuppressibleLoggingHelper
     {
+        private readonly TaskLoggingHelper _helper;
         private readonly ImmutableHashSet<string> _disabledWarnings;
         private readonly string _requiredPrefix;
 
         public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string disabledWarnings)
         {
+            _helper = helper;
+
             if (string.IsNullOrWhiteSpace(requiredPrefix))
                 throw new ArgumentException("A required warning prefix must be supplied.", nameof(requiredPrefix));
 
             _requiredPrefix = requiredPrefix;
-
-            Helper = helper;
 
             _disabledWarnings = disabledWarnings
                 .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -28,8 +29,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 .Where(item => item.StartsWith(requiredPrefix, StringComparison.OrdinalIgnoreCase))
                 .ToImmutableHashSet(StringComparer.OrdinalIgnoreCase);
         }
-
-        public TaskLoggingHelper Helper { get; }
 
         public void LogWarning(string warningCode, string message, params object?[] messageArgs)
         {
@@ -39,7 +38,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             if (_disabledWarnings.Contains(warningCode))
                 return;
 
-            Helper.LogWarning(subcategory: null, warningCode, helpKeyword: null, file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0, message, messageArgs);
+            _helper.LogWarning(subcategory: null, warningCode, helpKeyword: null, file: null, lineNumber: 0, columnNumber: 0, endLineNumber: 0, endColumnNumber: 0, message, messageArgs);
+        }
+
+        public void LogMessage(string message, params object?[] messageArgs)
+        {
+            _helper.LogMessage(message, messageArgs);
         }
     }
 }
