@@ -3,6 +3,7 @@
 
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
+    using System;
     using System.IO;
     using System.Linq;
     using Microsoft.Build.Framework;
@@ -18,6 +19,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             TargetFrameworkDirectories = null!;
             AnnotatedReferenceAssemblyDirectory = null!;
             OutputPath = null!;
+            DisabledWarnings = null!;
         }
 
         [Required]
@@ -48,6 +50,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
+        [Required]
+        public string DisabledWarnings
+        {
+            get;
+            set;
+        }
+
         [Output]
         public ITaskItem[]? GeneratedAssemblies
         {
@@ -57,6 +66,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public override bool Execute()
         {
+            var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", DisabledWarnings);
+
             string unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
             string annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
             bool foundAnnotatedAssembly = File.Exists(annotatedReferenceAssembly);
@@ -80,7 +91,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             Directory.CreateDirectory(OutputPath);
             string outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
-            Program.Main(Log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
+            Program.Main(log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
             GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
 
             return true;
