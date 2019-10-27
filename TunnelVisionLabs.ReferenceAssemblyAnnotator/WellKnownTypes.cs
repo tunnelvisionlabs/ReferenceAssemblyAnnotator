@@ -16,6 +16,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly WellKnownType _systemRuntimeCompilerServicesCompilerGeneratedAttribute = new PredefinedType(typeof(CompilerGeneratedAttribute));
 
         private readonly WellKnownType _systemRuntimeCompilerServicesReferenceAssemblyAttribute = new ReferenceAssemblyAttributeProvidedType();
+        private readonly WellKnownType _microsoftCodeAnalysisEmbeddedAttribute = new EmbeddedAttributeProvidedType();
+        private readonly WellKnownType _systemRuntimeCompilerServicesNullableAttribute = new NullableAttributeProvidedType();
+        private readonly WellKnownType _systemRuntimeCompilerServicesNullableContextAttribute = new NullableContextAttributeProvidedType();
+        private readonly WellKnownType _systemRuntimeCompilerServicesNullablePublicOnlyAttribute = new NullablePublicOnlyAttributeProvidedType();
 
         public WellKnownTypes(AssemblyDefinition assemblyDefinition)
         {
@@ -23,6 +27,18 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             SystemRuntimeCompilerServicesReferenceAssemblyAttribute = new Lazy<TypeReference>(
                 () => _systemRuntimeCompilerServicesReferenceAssemblyAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            MicrosoftCodeAnalysisEmbeddedAttribute = new Lazy<TypeReference>(
+                () => _microsoftCodeAnalysisEmbeddedAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            SystemRuntimeCompilerServicesNullableAttribute = new Lazy<TypeReference>(
+                () => _systemRuntimeCompilerServicesNullableAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            SystemRuntimeCompilerServicesNullableContextAttribute = new Lazy<TypeReference>(
+                () => _systemRuntimeCompilerServicesNullableContextAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            SystemRuntimeCompilerServicesNullablePublicOnlyAttribute = new Lazy<TypeReference>(
+                () => _systemRuntimeCompilerServicesNullablePublicOnlyAttribute.GetOrCreateTypeReference(Module, this),
                 LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
@@ -39,6 +55,14 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute => _systemRuntimeCompilerServicesCompilerGeneratedAttribute.GetOrCreateTypeReference(Module, this);
 
         public Lazy<TypeReference> SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
+
+        public Lazy<TypeReference> MicrosoftCodeAnalysisEmbeddedAttribute { get; }
+
+        public Lazy<TypeReference> SystemRuntimeCompilerServicesNullableAttribute { get; }
+
+        public Lazy<TypeReference> SystemRuntimeCompilerServicesNullableContextAttribute { get; }
+
+        public Lazy<TypeReference> SystemRuntimeCompilerServicesNullablePublicOnlyAttribute { get; }
 
         private static TypeDefinition ResolveRequiredWellKnownType(ModuleDefinition module, Type type)
         {

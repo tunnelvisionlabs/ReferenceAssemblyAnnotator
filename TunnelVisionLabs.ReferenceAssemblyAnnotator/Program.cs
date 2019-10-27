@@ -34,13 +34,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             var wellKnownTypes = new WellKnownTypes(assemblyDefinition);
 
-            // Define embedded types used by the compiler
-            var embeddedAttribute = DefineEmbeddedAttribute(assemblyDefinition, wellKnownTypes);
-            var nullableAttribute = DefineNullableAttribute(assemblyDefinition, embeddedAttribute, wellKnownTypes);
-            var nullableContextAttribute = DefineNullableContextAttribute(assemblyDefinition, embeddedAttribute, wellKnownTypes);
-            var nullablePublicOnlyAttribute = DefineNullablePublicOnlyAttribute(assemblyDefinition, embeddedAttribute, wellKnownTypes);
-
-            var attributeFactory = new CustomAttributeFactory(wellKnownTypes, embeddedAttribute, nullableAttribute, nullableContextAttribute, nullablePublicOnlyAttribute);
+            var attributeFactory = new CustomAttributeFactory(wellKnownTypes);
 
             // Define attributes for annotating nullable types
             var allowNullAttribute = DefineAllowNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
@@ -57,9 +51,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             EnsureReferenceAssemblyAttribute(assemblyDefinition, attributeFactory);
 
             var attributesOfInterest = new Dictionary<string, TypeDefinition>();
-            attributesOfInterest.Add(nullableAttribute.FullName, nullableAttribute);
-            attributesOfInterest.Add(nullableContextAttribute.FullName, nullableContextAttribute);
-            attributesOfInterest.Add(nullablePublicOnlyAttribute.FullName, nullablePublicOnlyAttribute);
+            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.Resolve());
             attributesOfInterest.Add(allowNullAttribute.FullName, allowNullAttribute);
             attributesOfInterest.Add(disallowNullAttribute.FullName, disallowNullAttribute);
             attributesOfInterest.Add(doesNotReturnAttribute.FullName, doesNotReturnAttribute);
@@ -281,94 +275,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private static FieldDefinition FindMatchingField(FieldDefinition fieldDefinition, TypeDefinition annotatedTypeDefinition)
         {
             return annotatedTypeDefinition.Fields.SingleOrDefault(property => property.Name == fieldDefinition.Name);
-        }
-
-        private static TypeDefinition DefineEmbeddedAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "Microsoft.CodeAnalysis",
-                name: "EmbeddedAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            var constructor = attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-
-            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-            var customAttribute = new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor));
-            attribute.CustomAttributes.Add(customAttribute);
-            attribute.CustomAttributes.Add(new CustomAttribute(constructor));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNullableAttribute(AssemblyDefinition assemblyDefinition, TypeReference embeddedAttribute, WellKnownTypes wellKnownTypes)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Runtime.CompilerServices",
-                name: "NullableAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-            attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
-            attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
-
-            var constructorByte = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructorByte.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Byte));
-
-            var constructorByteArray = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructorByteArray.Parameters.Add(new ParameterDefinition(new ArrayType(wellKnownTypes.TypeSystem.Byte)));
-
-            attribute.Methods.Add(constructorByte);
-            attribute.Methods.Add(constructorByteArray);
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNullableContextAttribute(AssemblyDefinition assemblyDefinition, TypeReference embeddedAttribute, WellKnownTypes wellKnownTypes)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Runtime.CompilerServices",
-                name: "NullableContextAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-            attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
-            attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Byte));
-            attribute.Methods.Add(constructor);
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNullablePublicOnlyAttribute(AssemblyDefinition assemblyDefinition, TypeReference embeddedAttribute, WellKnownTypes wellKnownTypes)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Runtime.CompilerServices",
-                name: "NullablePublicOnlyAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-            attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
-            attribute.CustomAttributes.Add(new CustomAttribute(embeddedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Boolean));
-            attribute.Methods.Add(constructor);
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
         }
 
         private static TypeDefinition DefineAllowNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
