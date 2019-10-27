@@ -74,7 +74,7 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
 </PropertyGroup>
 <ItemGroup>
   <PackageDownload Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
-  <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
+  <PackageReference Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
 </ItemGroup>
 ```
 
