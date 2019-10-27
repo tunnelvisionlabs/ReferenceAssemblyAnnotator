@@ -8,6 +8,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <BuildOutputTargetFolder>tools</BuildOutputTargetFolder>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageId>TunnelVisionLabs.ReferenceAssemblyAnnotator.NewIdRequiredDueToNuGetBug</PackageId>
   </PropertyGroup>
 
