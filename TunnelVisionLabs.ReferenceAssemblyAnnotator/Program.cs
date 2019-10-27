@@ -40,22 +40,30 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             EnsureReferenceAssemblyAttribute(assemblyDefinition, attributeFactory);
 
             var attributesOfInterest = new Dictionary<string, TypeDefinition>();
-            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisAllowNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisAllowNullAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDisallowNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDisallowNullAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute.Value.Resolve());
-            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute.Value.Resolve());
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisAllowNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisDisallowNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute);
 
             AnnotateAssembly(log, assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
 
             assemblyDefinition.Write(outputAssembly);
+
+            return;
+
+            // Local functions
+            static void AddAttributeOfInterest(Dictionary<string, TypeDefinition> attributesOfInterest, Lazy<TypeReference> typeReference)
+            {
+                attributesOfInterest.Add(typeReference.Value.FullName, typeReference.Value.Resolve());
+            }
         }
 
         private static void AnnotateAssembly(SuppressibleLoggingHelper? log, AssemblyDefinition assemblyDefinition, AssemblyDefinition annotatedAssemblyDefinition, Dictionary<string, TypeDefinition> attributesOfInterest)
