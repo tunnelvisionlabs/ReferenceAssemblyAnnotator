@@ -18,10 +18,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 {
                     lock (_syncObject)
                     {
-                        if (_typeReference is null)
-                        {
-                            _typeReference = GetOrCreateTypeReferenceImpl(module, wellKnownTypes);
-                        }
+                        _typeReference ??= GetOrCreateTypeReferenceImpl(module, wellKnownTypes);
                     }
                 }
 
