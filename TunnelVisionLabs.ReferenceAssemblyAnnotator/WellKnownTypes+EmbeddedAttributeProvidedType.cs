@@ -8,31 +8,21 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal partial class WellKnownTypes
     {
-        private sealed class EmbeddedAttributeProvidedType : ProvidedType
+        private sealed class EmbeddedAttributeProvidedType : ProvidedAttributeType
         {
             internal EmbeddedAttributeProvidedType()
                 : base("Microsoft.CodeAnalysis", "EmbeddedAttribute")
             {
             }
 
-            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+            protected override void ImplementAttribute(ModuleDefinition module, TypeDefinition attribute, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
             {
-                var attribute = new TypeDefinition(
-                    @namespace: NamespaceName,
-                    name: TypeName,
-                    TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                    module.ImportReference(wellKnownTypes.SystemAttribute));
-
                 var constructor = attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
 
                 MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
                 var customAttribute = new CustomAttribute(module.ImportReference(compilerGeneratedConstructor));
                 attribute.CustomAttributes.Add(customAttribute);
                 attribute.CustomAttributes.Add(new CustomAttribute(constructor));
-
-                module.Types.Add(attribute);
-
-                return attribute;
             }
         }
     }

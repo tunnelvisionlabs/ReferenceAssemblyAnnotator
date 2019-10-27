@@ -8,27 +8,17 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal partial class WellKnownTypes
     {
-        private sealed class AllowNullAttributeProvidedType : ProvidedType
+        private sealed class AllowNullAttributeProvidedType : ProvidedAttributeType
         {
             public AllowNullAttributeProvidedType()
                 : base("System.Diagnostics.CodeAnalysis", "AllowNullAttribute")
             {
             }
 
-            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+            protected override void ImplementAttribute(ModuleDefinition module, TypeDefinition attribute, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
             {
-                var attribute = new TypeDefinition(
-                    @namespace: NamespaceName,
-                    name: TypeName,
-                    TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                    wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
                 attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
                 attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, inherited: false));
-
-                module.Types.Add(attribute);
-
-                return attribute;
             }
         }
     }

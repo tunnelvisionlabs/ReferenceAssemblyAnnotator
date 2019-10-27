@@ -28,10 +28,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 if (existingType is object && existingType.IsPublic)
                     return existingType;
 
-                return DefineAttribute(module, wellKnownTypes, new CustomAttributeFactory(wellKnownTypes));
+                return DefineType(module, wellKnownTypes, new CustomAttributeFactory(wellKnownTypes));
             }
 
-            protected abstract TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory);
+            protected abstract TypeReference DefineType(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory);
         }
     }
 }

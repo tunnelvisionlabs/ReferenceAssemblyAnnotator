@@ -8,30 +8,20 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal partial class WellKnownTypes
     {
-        private sealed class DoesNotReturnIfAttributeProvidedType : ProvidedType
+        private sealed class DoesNotReturnIfAttributeProvidedType : ProvidedAttributeType
         {
             public DoesNotReturnIfAttributeProvidedType()
                 : base("System.Diagnostics.CodeAnalysis", "DoesNotReturnIfAttribute")
             {
             }
 
-            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+            protected override void ImplementAttribute(ModuleDefinition module, TypeDefinition attribute, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
             {
-                var attribute = new TypeDefinition(
-                    @namespace: NamespaceName,
-                    name: TypeName,
-                    TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                    wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
                 var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
                 constructor.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
                 attribute.Methods.Add(constructor);
 
                 attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Parameter, inherited: false));
-
-                module.Types.Add(attribute);
-
-                return attribute;
             }
         }
     }

@@ -8,21 +8,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal partial class WellKnownTypes
     {
-        private sealed class NullableAttributeProvidedType : ProvidedType
+        private sealed class NullableAttributeProvidedType : ProvidedAttributeType
         {
             internal NullableAttributeProvidedType()
                 : base("System.Runtime.CompilerServices", "NullableAttribute")
             {
             }
 
-            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
+            protected override void ImplementAttribute(ModuleDefinition module, TypeDefinition attribute, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
             {
-                var attribute = new TypeDefinition(
-                    @namespace: NamespaceName,
-                    name: TypeName,
-                    TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                    wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
                 MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
                 attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
                 attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.MicrosoftCodeAnalysisEmbeddedAttribute.Value.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
@@ -35,10 +29,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
                 attribute.Methods.Add(constructorByte);
                 attribute.Methods.Add(constructorByteArray);
-
-                module.Types.Add(attribute);
-
-                return attribute;
             }
         }
     }
