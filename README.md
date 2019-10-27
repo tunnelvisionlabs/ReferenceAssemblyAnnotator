@@ -53,7 +53,7 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
 </ItemGroup>
 ```
 
-Minimal:
+#### Minimal:
 
 ```xml
 <PropertyGroup>
@@ -62,6 +62,19 @@ Minimal:
 <ItemGroup>
   <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
   <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
+</ItemGroup>
+```
+
+#### When multi targeting
+
+```xml
+<PropertyGroup Condition="'$(TargetFramework)' != 'netcoreapp3.0'">
+  <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
+  <GenerateNullableAttributes>true</GenerateNullableAttributes>
+</PropertyGroup>
+<ItemGroup>
+  <PackageDownload Condition="'$(TargetFramework)' != 'netcoreapp3.0'" Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
+  <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
 </ItemGroup>
 ```
 
