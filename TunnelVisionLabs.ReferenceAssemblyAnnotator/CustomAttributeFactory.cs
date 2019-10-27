@@ -7,7 +7,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     using System.Linq;
     using Mono.Cecil;
 
-    internal class CustomAttributeFactory
+    internal readonly struct CustomAttributeFactory
     {
         private readonly WellKnownTypes _wellKnownTypes;
 

@@ -36,17 +36,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             var attributeFactory = new CustomAttributeFactory(wellKnownTypes);
 
-            // Define attributes for annotating nullable types
-            var allowNullAttribute = DefineAllowNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var disallowNullAttribute = DefineDisallowNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var doesNotReturnAttribute = DefineDoesNotReturnAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var doesNotReturnIfAttribute = DefineDoesNotReturnIfAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var maybeNullAttribute = DefineMaybeNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var maybeNullWhenAttribute = DefineMaybeNullWhenAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var notNullAttribute = DefineNotNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var notNullIfNotNullAttribute = DefineNotNullIfNotNullAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-            var notNullWhenAttribute = DefineNotNullWhenAttribute(assemblyDefinition, wellKnownTypes, attributeFactory);
-
             // Ensure the assembly is marked with ReferenceAssemblyAttribute
             EnsureReferenceAssemblyAttribute(assemblyDefinition, attributeFactory);
 
@@ -54,15 +43,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableAttribute.Value.Resolve());
             attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullableContextAttribute.Value.Resolve());
             attributesOfInterest.Add(wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.FullName, wellKnownTypes.SystemRuntimeCompilerServicesNullablePublicOnlyAttribute.Value.Resolve());
-            attributesOfInterest.Add(allowNullAttribute.FullName, allowNullAttribute);
-            attributesOfInterest.Add(disallowNullAttribute.FullName, disallowNullAttribute);
-            attributesOfInterest.Add(doesNotReturnAttribute.FullName, doesNotReturnAttribute);
-            attributesOfInterest.Add(doesNotReturnIfAttribute.FullName, doesNotReturnIfAttribute);
-            attributesOfInterest.Add(maybeNullAttribute.FullName, maybeNullAttribute);
-            attributesOfInterest.Add(maybeNullWhenAttribute.FullName, maybeNullWhenAttribute);
-            attributesOfInterest.Add(notNullAttribute.FullName, notNullAttribute);
-            attributesOfInterest.Add(notNullIfNotNullAttribute.FullName, notNullIfNotNullAttribute);
-            attributesOfInterest.Add(notNullWhenAttribute.FullName, notNullWhenAttribute);
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisAllowNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisAllowNullAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDisallowNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDisallowNullAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute.Value.Resolve());
+            attributesOfInterest.Add(wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute.Value.FullName, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute.Value.Resolve());
 
             AnnotateAssembly(log, assemblyDefinition, annotatedAssemblyDefinition, attributesOfInterest);
 
@@ -275,164 +264,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private static FieldDefinition FindMatchingField(FieldDefinition fieldDefinition, TypeDefinition annotatedTypeDefinition)
         {
             return annotatedTypeDefinition.Fields.SingleOrDefault(property => property.Name == fieldDefinition.Name);
-        }
-
-        private static TypeDefinition DefineAllowNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "AllowNullAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineDisallowNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "DisallowNullAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineDoesNotReturnAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "DoesNotReturnAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Method, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineDoesNotReturnIfAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "DoesNotReturnIfAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
-            attribute.Methods.Add(constructor);
-
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Parameter, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineMaybeNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "MaybeNullAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineMaybeNullWhenAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "MaybeNullWhenAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition("returnValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
-            attribute.Methods.Add(constructor);
-
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Parameter, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNotNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "NotNullAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.AddDefaultConstructor(wellKnownTypes.TypeSystem);
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.ReturnValue, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNotNullIfNotNullAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "NotNullIfNotNullAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            attribute.CustomAttributes.Add(attributeFactory.NullableContext(1));
-            attribute.CustomAttributes.Add(attributeFactory.Nullable(0));
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.ReturnValue, allowMultiple: true, inherited: false));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition("parameterName", ParameterAttributes.None, wellKnownTypes.TypeSystem.String));
-            attribute.Methods.Add(constructor);
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineNotNullWhenAttribute(AssemblyDefinition assemblyDefinition, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Diagnostics.CodeAnalysis",
-                name: "NotNullWhenAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
-
-            var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-            constructor.Parameters.Add(new ParameterDefinition("returnValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
-            attribute.Methods.Add(constructor);
-
-            attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Parameter, inherited: false));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
         }
 
         private static void EnsureReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, CustomAttributeFactory attributeFactory)

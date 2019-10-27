@@ -3,15 +3,15 @@
 
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
-    using System.Linq;
+    using System;
     using Mono.Cecil;
 
     internal partial class WellKnownTypes
     {
-        private sealed class NullablePublicOnlyAttributeProvidedType : ProvidedType
+        private sealed class NotNullIfNotNullAttributeProvidedType : ProvidedType
         {
-            internal NullablePublicOnlyAttributeProvidedType()
-                : base("System.Runtime.CompilerServices", "NullablePublicOnlyAttribute")
+            public NotNullIfNotNullAttributeProvidedType()
+                : base("System.Diagnostics.CodeAnalysis", "NotNullIfNotNullAttribute")
             {
             }
 
@@ -23,12 +23,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                     TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                     wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-                MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-                attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
-                attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.MicrosoftCodeAnalysisEmbeddedAttribute.Value.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
+                attribute.CustomAttributes.Add(attributeFactory.NullableContext(1));
+                attribute.CustomAttributes.Add(attributeFactory.Nullable(0));
+                attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.ReturnValue, allowMultiple: true, inherited: false));
 
                 var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-                constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Boolean));
+                constructor.Parameters.Add(new ParameterDefinition("parameterName", ParameterAttributes.None, wellKnownTypes.TypeSystem.String));
                 attribute.Methods.Add(constructor);
 
                 module.Types.Add(attribute);

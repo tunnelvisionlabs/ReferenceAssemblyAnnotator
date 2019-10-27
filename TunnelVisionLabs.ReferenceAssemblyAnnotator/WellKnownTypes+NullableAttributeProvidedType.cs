@@ -15,7 +15,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
-            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes)
+            protected override TypeReference DefineAttribute(ModuleDefinition module, WellKnownTypes wellKnownTypes, CustomAttributeFactory attributeFactory)
             {
                 var attribute = new TypeDefinition(
                     @namespace: NamespaceName,

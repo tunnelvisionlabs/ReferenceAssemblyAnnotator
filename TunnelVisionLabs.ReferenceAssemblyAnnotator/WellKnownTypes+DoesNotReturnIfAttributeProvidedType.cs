@@ -3,15 +3,15 @@
 
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
-    using System.Linq;
+    using System;
     using Mono.Cecil;
 
     internal partial class WellKnownTypes
     {
-        private sealed class NullablePublicOnlyAttributeProvidedType : ProvidedType
+        private sealed class DoesNotReturnIfAttributeProvidedType : ProvidedType
         {
-            internal NullablePublicOnlyAttributeProvidedType()
-                : base("System.Runtime.CompilerServices", "NullablePublicOnlyAttribute")
+            public DoesNotReturnIfAttributeProvidedType()
+                : base("System.Diagnostics.CodeAnalysis", "DoesNotReturnIfAttribute")
             {
             }
 
@@ -23,13 +23,11 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                     TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
                     wellKnownTypes.Module.ImportReference(wellKnownTypes.SystemAttribute));
 
-                MethodDefinition compilerGeneratedConstructor = wellKnownTypes.SystemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-                attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor)));
-                attribute.CustomAttributes.Add(new CustomAttribute(wellKnownTypes.MicrosoftCodeAnalysisEmbeddedAttribute.Value.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0)));
-
                 var constructor = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-                constructor.Parameters.Add(new ParameterDefinition(wellKnownTypes.TypeSystem.Boolean));
+                constructor.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
                 attribute.Methods.Add(constructor);
+
+                attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Parameter, inherited: false));
 
                 module.Types.Add(attribute);
 
