@@ -7,16 +7,16 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     using System.Runtime.CompilerServices;
     using Mono.Cecil;
 
-    internal class WellKnownTypes
+    internal partial class WellKnownTypes
     {
+        private readonly WellKnownType _systemAttribute = new PredefinedType(typeof(Attribute));
+        private readonly WellKnownType _systemAttributeTargets = new PredefinedType(typeof(AttributeTargets));
+        private readonly WellKnownType _systemAttributeUsageAttribute = new PredefinedType(typeof(AttributeUsageAttribute));
+        private readonly WellKnownType _systemRuntimeCompilerServicesCompilerGeneratedAttribute = new PredefinedType(typeof(CompilerGeneratedAttribute));
+
         public WellKnownTypes(AssemblyDefinition assemblyDefinition, Func<AssemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute), TypeDefinition> defineReferenceAssemblyAttribute)
         {
             Module = assemblyDefinition.MainModule;
-
-            SystemAttribute = ResolveRequiredWellKnownType(Module, typeof(Attribute));
-            SystemAttributeTargets = ResolveRequiredWellKnownType(Module, typeof(AttributeTargets));
-            SystemAttributeUsageAttribute = ResolveRequiredWellKnownType(Module, typeof(AttributeUsageAttribute));
-            SystemRuntimeCompilerServicesCompilerGeneratedAttribute = ResolveRequiredWellKnownType(Module, typeof(CompilerGeneratedAttribute));
 
             SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(Module, typeof(ReferenceAssemblyAttribute))
                 ?? defineReferenceAssemblyAttribute(
@@ -28,13 +28,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public TypeSystem TypeSystem => Module.TypeSystem;
 
-        public TypeReference SystemAttribute { get; }
+        public TypeReference SystemAttribute => _systemAttribute.GetOrCreateTypeReference(Module, this);
 
-        public TypeReference SystemAttributeTargets { get; }
+        public TypeReference SystemAttributeTargets => _systemAttributeTargets.GetOrCreateTypeReference(Module, this);
 
-        public TypeReference SystemAttributeUsageAttribute { get; }
+        public TypeReference SystemAttributeUsageAttribute => _systemAttributeUsageAttribute.GetOrCreateTypeReference(Module, this);
 
-        public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute { get; }
+        public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute => _systemRuntimeCompilerServicesCompilerGeneratedAttribute.GetOrCreateTypeReference(Module, this);
 
         public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
 
