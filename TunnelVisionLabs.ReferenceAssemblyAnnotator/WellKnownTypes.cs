@@ -5,6 +5,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using System;
     using System.Runtime.CompilerServices;
+    using System.Threading;
     using Mono.Cecil;
 
     internal partial class WellKnownTypes
@@ -14,14 +15,15 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly WellKnownType _systemAttributeUsageAttribute = new PredefinedType(typeof(AttributeUsageAttribute));
         private readonly WellKnownType _systemRuntimeCompilerServicesCompilerGeneratedAttribute = new PredefinedType(typeof(CompilerGeneratedAttribute));
 
-        public WellKnownTypes(AssemblyDefinition assemblyDefinition, Func<AssemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute), TypeDefinition> defineReferenceAssemblyAttribute)
+        private readonly WellKnownType _systemRuntimeCompilerServicesReferenceAssemblyAttribute = new ReferenceAssemblyAttributeProvidedType();
+
+        public WellKnownTypes(AssemblyDefinition assemblyDefinition)
         {
             Module = assemblyDefinition.MainModule;
 
-            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = ResolveWellKnownType(Module, typeof(ReferenceAssemblyAttribute))
-                ?? defineReferenceAssemblyAttribute(
-                    assemblyDefinition,
-                    (systemAttribute: SystemAttribute, systemRuntimeCompilerServicesCompilerGeneratedAttribute: SystemRuntimeCompilerServicesCompilerGeneratedAttribute));
+            SystemRuntimeCompilerServicesReferenceAssemblyAttribute = new Lazy<TypeReference>(
+                () => _systemRuntimeCompilerServicesReferenceAssemblyAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
         public ModuleDefinition Module { get; }
@@ -36,7 +38,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute => _systemRuntimeCompilerServicesCompilerGeneratedAttribute.GetOrCreateTypeReference(Module, this);
 
-        public TypeReference SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
+        public Lazy<TypeReference> SystemRuntimeCompilerServicesReferenceAssemblyAttribute { get; }
 
         private static TypeDefinition ResolveRequiredWellKnownType(ModuleDefinition module, Type type)
         {

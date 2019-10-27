@@ -8,7 +8,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using Microsoft.Build.Utilities;
     using Mono.Cecil;
     using Mono.Cecil.Rocks;
 
@@ -33,7 +32,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             annotatedAssemblyResolver.AddSearchDirectory(Path.GetDirectoryName(annotatedReferenceAssembly));
             using var annotatedAssemblyDefinition = AssemblyDefinition.ReadAssembly(annotatedReferenceAssembly, new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = annotatedAssemblyResolver });
 
-            var wellKnownTypes = new WellKnownTypes(assemblyDefinition, DefineReferenceAssemblyAttribute);
+            var wellKnownTypes = new WellKnownTypes(assemblyDefinition);
 
             // Define embedded types used by the compiler
             var embeddedAttribute = DefineEmbeddedAttribute(assemblyDefinition, wellKnownTypes);
@@ -298,25 +297,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             var customAttribute = new CustomAttribute(wellKnownTypes.Module.ImportReference(compilerGeneratedConstructor));
             attribute.CustomAttributes.Add(customAttribute);
             attribute.CustomAttributes.Add(new CustomAttribute(constructor));
-
-            assemblyDefinition.MainModule.Types.Add(attribute);
-
-            return attribute;
-        }
-
-        private static TypeDefinition DefineReferenceAssemblyAttribute(AssemblyDefinition assemblyDefinition, (TypeReference systemAttribute, TypeReference systemRuntimeCompilerServicesCompilerGeneratedAttribute) wellKnownTypes)
-        {
-            var attribute = new TypeDefinition(
-                @namespace: "System.Runtime.CompilerServices",
-                name: "ReferenceAssemblyAttribute",
-                TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-                assemblyDefinition.MainModule.ImportReference(wellKnownTypes.systemAttribute));
-
-            attribute.AddDefaultConstructor(assemblyDefinition.MainModule.TypeSystem);
-
-            MethodDefinition compilerGeneratedConstructor = wellKnownTypes.systemRuntimeCompilerServicesCompilerGeneratedAttribute.Resolve().Methods.Single(method => method.IsConstructor && !method.IsStatic && method.Parameters.Count == 0);
-            var customAttribute = new CustomAttribute(assemblyDefinition.MainModule.ImportReference(compilerGeneratedConstructor));
-            attribute.CustomAttributes.Add(customAttribute);
 
             assemblyDefinition.MainModule.Types.Add(attribute);
 
