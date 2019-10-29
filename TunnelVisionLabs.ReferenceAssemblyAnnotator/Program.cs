@@ -171,12 +171,25 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         private static void Annotate(ICustomAttributeProvider provider, ICustomAttributeProvider annotatedProvider, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
+            // Start by removing any prior attributes that need to be filtered out
+            for (int i = 0; i < provider.CustomAttributes.Count; i++)
+            {
+                if (IsExcludedAnnotation(provider, annotatedProvider, provider.CustomAttributes[i]))
+                {
+                    provider.CustomAttributes.RemoveAt(i);
+                    i--;
+                }
+            }
+
             foreach (var customAttribute in annotatedProvider.CustomAttributes)
             {
                 if (!attributesOfInterest.TryGetValue(customAttribute.AttributeType.FullName, out var attributeTypeDefinition))
                     continue;
 
                 if (customAttribute.Fields.Count != 0 || customAttribute.Properties.Count != 0)
+                    continue;
+
+                if (IsExcludedAnnotation(provider, annotatedProvider, customAttribute))
                     continue;
 
                 var constructor = attributeTypeDefinition.Methods.SingleOrDefault(method => IsMatchingConstructor(method, customAttribute));
@@ -205,6 +218,25 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
                 return true;
             }
+        }
+
+        private static bool IsExcludedAnnotation(ICustomAttributeProvider provider, ICustomAttributeProvider annotatedProvider, CustomAttribute customAttribute)
+        {
+            if (provider is ParameterDefinition parameter
+                && parameter.Method is MethodDefinition { Name: nameof(GetHashCode), Parameters: { Count: 1 } } method
+                && method.DeclaringType is { Namespace: "System.Collections.Generic", GenericParameters: { Count: 1 } } type)
+            {
+                if (type.Name == "IEqualityComparer`1"
+                    || type.Name == "EqualityComparer`1")
+                {
+                    // Remove DisallowNullAttribute from:
+                    // 1. System.Collections.Generic.IEqualityComparer<T>.GetHashCode([DisallowNull] T)
+                    // 2. System.Collections.Generic.EqualityComparer<T>.GetHashCode([DisallowNull] T)
+                    return customAttribute.AttributeType.FullName == "System.Diagnostics.CodeAnalysis.DisallowNullAttribute";
+                }
+            }
+
+            return false;
         }
 
         private static TypeDefinition? FindMatchingType(SuppressibleLoggingHelper? log, TypeDefinition typeDefinition, ModuleDefinition annotatedModuleDefinition)
