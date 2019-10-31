@@ -3,19 +3,25 @@
 
   <UsingTask TaskName="TunnelVisionLabs.ReferenceAssemblyAnnotator.AnnotatorBuildTask" AssemblyFile="$(ReferenceAssemblyAnnotatorBuildTaskPath)TunnelVisionLabs.ReferenceAssemblyAnnotator.dll" />
 
+  <PropertyGroup Condition="
+                   ('$(TargetFrameworkIdentifier)' == '.NETStandard' AND $([System.Version]::Parse($(TargetFrameworkVersion.Substring(1)))) &gt;= $([System.Version]::Parse('2.1')))
+                   OR ('$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([System.Version]::Parse($(TargetFrameworkVersion.Substring(1)))) &gt;= $([System.Version]::Parse('3.0')))">
+    <TargetFrameworkIsNativelyAnnotated>true</TargetFrameworkIsNativelyAnnotated>
+  </PropertyGroup>
+
   <PropertyGroup>
     <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == ''">true</GenerateNullableAttributes>
     <NullableAttributesPath Condition="'$(NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes$(DefaultLanguageSourceExtension)</NullableAttributesPath>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(GenerateNullableAttributes)' == 'true' AND Exists($(NullableAttributesPath))">
+  <ItemGroup Condition="'$(TargetFrameworkIsNativelyAnnotated)' != 'true' AND '$(GenerateNullableAttributes)' == 'true' AND Exists($(NullableAttributesPath))">
     <Compile Include="$(NullableAttributesPath)" Visible="false" />
 
     <!-- Make sure the source file is embedded in PDB to support Source Link -->
     <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(NullableAttributesPath)" />
   </ItemGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFrameworkIsNativelyAnnotated)' != 'true'">
     <ResolveAssemblyReferencesDependsOn>
       $(ResolveAssemblyReferencesDependsOn);
       AnnotateReferenceAssemblies;
