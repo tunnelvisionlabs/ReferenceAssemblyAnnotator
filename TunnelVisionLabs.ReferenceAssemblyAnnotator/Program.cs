@@ -15,8 +15,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
     {
         internal static void Main(SuppressibleLoggingHelper? log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
         {
-            var assemblyResolver = new DefaultAssemblyResolver();
-            assemblyResolver.AddSearchDirectory(Path.GetDirectoryName(referenceAssembly));
+            using var assemblyResolver = new AssemblyResolver(Path.GetDirectoryName(Path.GetFullPath(referenceAssembly))!);
             using var assemblyDefinition = AssemblyDefinition.ReadAssembly(referenceAssembly, new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = assemblyResolver });
 
             foreach (var module in assemblyDefinition.Modules)
@@ -28,8 +27,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 }
             }
 
-            var annotatedAssemblyResolver = new DefaultAssemblyResolver();
-            annotatedAssemblyResolver.AddSearchDirectory(Path.GetDirectoryName(annotatedReferenceAssembly));
+            using var annotatedAssemblyResolver = new AssemblyResolver(Path.GetDirectoryName(Path.GetFullPath(annotatedReferenceAssembly))!);
             using var annotatedAssemblyDefinition = AssemblyDefinition.ReadAssembly(annotatedReferenceAssembly, new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = annotatedAssemblyResolver });
 
             var wellKnownTypes = new WellKnownTypes(assemblyDefinition);
