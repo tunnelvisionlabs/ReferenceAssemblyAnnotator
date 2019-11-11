@@ -50,7 +50,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
-        [Required]
         public string DisabledWarnings
         {
             get;
