@@ -28,7 +28,9 @@
     <AddStandardAssembliesForAnnotationDependsOn>ResolveLockFileReferences</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '3.0'">
+  <PropertyGroup Condition="
+                 ('$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '3.0')
+                 OR ('$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.1')">
     <RestoreTargetFrameworkDirectoryDependsOn>ResolveTargetingPackAssets</RestoreTargetFrameworkDirectoryDependsOn>
     <AddStandardAssembliesForAnnotationDependsOn>ResolveTargetingPackAssets</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
@@ -90,8 +92,7 @@
           Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
           DependsOnTargets="$(RestoreTargetFrameworkDirectoryDependsOn)"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' == ''">
-      <!-- .NET Standard 1.x -->
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
       <_TargetFrameworkReferences Include="@(Reference)"
                                   Condition="
                                 '%(NuGetPackageId)' == 'Microsoft.Win32.Primitives'
@@ -142,9 +143,15 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
-      <!-- .NET Standard 2+ -->
+      <!-- .NET Standard 2.0 -->
       <_NuGetPackageFoldersItems Include="$(NuGetPackageFolders)" />
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_NuGetPackageFoldersItems.Identity)', 'netstandard.library', '$(NETStandardLibraryPackageVersion)', 'build', 'netstandard2.0', 'ref'))" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.1'">
+      <_TargetFrameworkReferences Include="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)' == 'NETStandard.Library'" />
+      <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(_TargetFrameworkReferences.Identity)'))" />
+      <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
@@ -193,8 +200,7 @@
                                         OR '%(Reference.Identity)' == 'System.Xml.Linq')" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' == ''">
-      <!-- .NET Standard 1.x -->
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')
                                       AND ('%(Reference.NuGetPackageId)' == 'Microsoft.Win32.Primitives'
@@ -245,11 +251,17 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
-      <!-- .NET Standard 2+ -->
+      <!-- .NET Standard 2.0 -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="'%(Reference.NuGetPackageId)' == 'NETStandard.Library' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
                                     OriginalReference="%(Reference.Identity)"
                                     IsNetStandard="True" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.1'">
+      <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
+                                    Condition="'%(Reference.FrameworkReferenceName)' == 'NETStandard.Library' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
+                                    OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
