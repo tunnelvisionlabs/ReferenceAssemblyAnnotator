@@ -23,6 +23,16 @@
     </ResolveAssemblyReferencesDependsOn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '3.0'">
+    <RestoreTargetFrameworkDirectoryDependsOn>ResolveLockFileReferences</RestoreTargetFrameworkDirectoryDependsOn>
+    <AddStandardAssembliesForAnnotationDependsOn>ResolveLockFileReferences</AddStandardAssembliesForAnnotationDependsOn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '3.0'">
+    <RestoreTargetFrameworkDirectoryDependsOn>ResolveTargetingPackAssets</RestoreTargetFrameworkDirectoryDependsOn>
+    <AddStandardAssembliesForAnnotationDependsOn>ResolveTargetingPackAssets</AddStandardAssembliesForAnnotationDependsOn>
+  </PropertyGroup>
+
   <PropertyGroup>
     <AnnotatedReferenceAssemblyDirectory Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">$(NuGetPackageRoot)\microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\netcoreapp3.0\</AnnotatedReferenceAssemblyDirectory>
   </PropertyGroup>
@@ -78,7 +88,7 @@
 
   <Target Name="RestoreTargetFrameworkDirectory"
           Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
-          DependsOnTargets="ResolveTargetingPackAssets"
+          DependsOnTargets="$(RestoreTargetFrameworkDirectoryDependsOn)"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' == ''">
       <!-- .NET Standard 1.x -->
@@ -138,7 +148,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
-      <_TargetFrameworkReferences Include="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App'" />
+      <_TargetFrameworkReferences Include="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App' OR '%(Reference.PackageName)' == 'Microsoft.NETCore.App'" />
       <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(_TargetFrameworkReferences.Identity)'))" />
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
@@ -167,7 +177,7 @@
 
   <!-- Automatically annotate .NET Standard assemblies -->
   <Target Name="AddStandardAssembliesForAnnotation"
-          DependsOnTargets="ResolveTargetingPackAssets"
+          DependsOnTargets="$(AddStandardAssembliesForAnnotationDependsOn)"
           BeforeTargets="ResolveOutputReferenceAssemblies">
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
       <UnannotatedReferenceAssembly Include="%(Reference.Identity)"
@@ -244,7 +254,7 @@
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
-                                    Condition="'%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
+                                    Condition="('%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App' OR '%(Reference.PackageName)' == 'Microsoft.NETCore.App') AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
                                     OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
   </Target>
