@@ -77,9 +77,9 @@
   </Target>
 
   <Target Name="RestoreTargetFrameworkDirectory"
-          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' == ''">
+    <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' == ''">
       <!-- .NET Standard 1.x -->
       <_NetStandardReferences Include="@(Reference)"
                               Condition="
@@ -130,7 +130,7 @@
       <_NetStandardNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_NetStandardNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
+    <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' != ''">
       <!-- .NET Standard 2+ -->
       <_NuGetPackageFoldersItems Include="$(NuGetPackageFolders)" />
       <_NetStandardNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_NuGetPackageFoldersItems.Identity)', 'netstandard.library', '$(NETStandardLibraryPackageVersion)', 'build', 'netstandard2.0', 'ref'))" />
@@ -175,7 +175,7 @@
                                         OR '%(Reference.Identity)' == 'System.Xml.Linq')" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' == ''">
+    <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' == ''">
       <!-- .NET Standard 1.x -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')
@@ -226,7 +226,7 @@
                                     IsNetStandard="True" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
+    <ItemGroup Condition="'$(NETStandardLibraryPackageVersion)' != ''">
       <!-- .NET Standard 2+ -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="'%(Reference.NuGetPackageId)' == 'NETStandard.Library' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
@@ -236,7 +236,7 @@
   </Target>
 
   <Target Name="UpdateNetStandardAssemblies"
-          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
           DependsOnTargets="AnnotateReferenceAssemblies">
     <ItemGroup>
       <Reference Remove="%(UnannotatedReferenceAssembly.OriginalReference)"
