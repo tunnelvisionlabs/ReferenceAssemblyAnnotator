@@ -11,5 +11,7 @@ skip_tags: true
 build:
   project: ReferenceAssemblyAnnotator.sln
   verbosity: minimal
+test_script:
+- .\test.ps1
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
