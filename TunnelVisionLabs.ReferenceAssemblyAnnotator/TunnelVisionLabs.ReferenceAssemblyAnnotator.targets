@@ -24,7 +24,7 @@
     <ResolveAssemblyReferencesDependsOn>
       $(ResolveAssemblyReferencesDependsOn);
       AnnotateReferenceAssemblies;
-      UpdateNetStandardAssemblies
+      UpdateReferences
     </ResolveAssemblyReferencesDependsOn>
   </PropertyGroup>
 
@@ -251,16 +251,14 @@
                                         OR '%(Reference.NuGetPackageId)' == 'System.Threading.Timer'
                                         OR '%(Reference.NuGetPackageId)' == 'System.Xml.ReaderWriter'
                                         OR '%(Reference.NuGetPackageId)' == 'System.Xml.XDocument')"
-                                    OriginalReference="%(Reference.Identity)"
-                                    IsNetStandard="True" />
+                                    OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
       <!-- .NET Standard 2.0 -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="'%(Reference.NuGetPackageId)' == 'NETStandard.Library' AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
-                                    OriginalReference="%(Reference.Identity)"
-                                    IsNetStandard="True" />
+                                    OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.1'">
@@ -276,14 +274,14 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="UpdateNetStandardAssemblies"
-          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'"
+  <Target Name="UpdateReferences"
+          Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
           DependsOnTargets="AnnotateReferenceAssemblies">
     <ItemGroup>
       <Reference Remove="%(UnannotatedReferenceAssembly.OriginalReference)"
-                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
+                 Condition="Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')" />
       <Reference Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')"
-                 Condition="'%(UnannotatedReferenceAssembly.IsNetStandard)' == 'True' AND Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')"
+                 Condition="Exists('%(UnannotatedReferenceAssembly.OutputAssembly)')"
                  HintPath="" />
     </ItemGroup>
   </Target>
