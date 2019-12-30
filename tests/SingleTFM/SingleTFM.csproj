@@ -8,7 +8,7 @@
     <NoWarn>RA1000</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0' OR '$(TargetFramework)' == 'netcoreapp1.1'">
     <!-- CS1701: Assuming assembly reference "Assembly Name #1" matches "Assembly Name #2", you may need to supply runtime policy -->
     <NoWarn>$(NoWarn),CS1701</NoWarn>
   </PropertyGroup>
