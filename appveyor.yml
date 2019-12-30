@@ -22,5 +22,7 @@ test_script:
 - msbuild /restore tests/SingleTFM /p:TestFramework=netstandard1.6 /warnaserror /v:m
 - git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.0 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'

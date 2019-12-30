@@ -8,6 +8,11 @@
     <NoWarn>RA1000</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0'">
+    <!-- CS1701: Assuming assembly reference "Assembly Name #1" matches "Assembly Name #2", you may need to supply runtime policy -->
+    <NoWarn>$(NoWarn),CS1701</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' != 'net35'" Include="System.Data.SqlClient" Version="4.8.0" />
     <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.*" PrivateAssets="all" />
