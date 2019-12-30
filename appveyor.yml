@@ -14,5 +14,13 @@ build:
 test_script:
 - git clean -dxf tests
 - msbuild /restore tests/MultiTFM /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=net35 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=net48 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard1.6 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /v:m
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
