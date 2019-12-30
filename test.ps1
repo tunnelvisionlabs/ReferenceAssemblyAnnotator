@@ -1,5 +1,11 @@
+param (
+	[switch]$Clean
+)
+
 $ErrorActionPreference = 'Stop'
 
-if (Test-Path 'tests\.isolatednugetcache') { Remove-Item -Recurse -Force 'tests\.isolatednugetcache' }
+if ($Clean) {
+	git 'clean' '-dxf' 'tests'
+}
 
 dotnet msbuild -restore tests /t:Rebuild /p:TreatWarningsAsErrors=true /v:Minimal

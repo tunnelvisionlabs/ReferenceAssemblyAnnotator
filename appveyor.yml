@@ -12,6 +12,6 @@ build:
   project: ReferenceAssemblyAnnotator.sln
   verbosity: minimal
 test_script:
-- .\test.ps1
+- .\test.ps1 -Clean
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
