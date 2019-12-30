@@ -13,6 +13,6 @@ build:
   verbosity: minimal
 test_script:
 - git clean -dxf tests
-- dotnet msbuild -restore tests /t:Rebuild /p:TreatWarningsAsErrors=true /v:Minimal
+- msbuild /restore tests /t:Rebuild /p:TreatWarningsAsErrors=true /v:Minimal
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
