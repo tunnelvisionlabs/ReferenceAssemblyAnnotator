@@ -12,6 +12,7 @@ build:
   project: ReferenceAssemblyAnnotator.sln
   verbosity: minimal
 test_script:
-- ps: .\test.ps1 -Clean
+- git clean -dxf tests
+- dotnet msbuild -restore tests /t:Rebuild /p:TreatWarningsAsErrors=true /v:Minimal
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
