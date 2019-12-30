@@ -11,5 +11,41 @@ skip_tags: true
 build:
   project: ReferenceAssemblyAnnotator.sln
   verbosity: minimal
+test_script:
+- git clean -dxf tests
+- msbuild /restore tests/MultiTFM /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=net35 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=net48 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard1.6 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.0 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.1 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
+
+- git clean -dxf tests
+- dotnet msbuild -restore tests/MultiTFM -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net35 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net48 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard1.6 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.0 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.0 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.1 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
