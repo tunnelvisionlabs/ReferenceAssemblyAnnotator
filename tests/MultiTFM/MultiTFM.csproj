@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net35;net48;netstandard1.6;netstandard2.0</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
     <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
     <NoWarn>RA1000</NoWarn>
