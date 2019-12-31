@@ -63,6 +63,13 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
+        [Output]
+        public ITaskItem[]? GeneratedDocumentationFiles
+        {
+            get;
+            set;
+        }
+
         public override bool Execute()
         {
             var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", DisabledWarnings);
@@ -92,6 +99,18 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             string outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
             Program.Main(log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
             GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
+
+            string sourceDocumentation = Path.ChangeExtension(unannotatedReferenceAssembly, ".xml");
+            string targetDocumentation = Path.ChangeExtension(outputAssembly, ".xml");
+            if (File.Exists(sourceDocumentation))
+            {
+                File.Copy(sourceDocumentation, targetDocumentation);
+                GeneratedDocumentationFiles = new[] { new TaskItem(targetDocumentation) };
+            }
+            else
+            {
+                GeneratedDocumentationFiles = Array.Empty<ITaskItem>();
+            }
 
             return true;
         }
