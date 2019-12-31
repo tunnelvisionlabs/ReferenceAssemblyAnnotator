@@ -171,10 +171,14 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
         private static void Annotate(ModuleDefinition module, ICustomAttributeProvider provider, ICustomAttributeProvider annotatedProvider, Dictionary<string, TypeDefinition> attributesOfInterest)
         {
-            // Start by removing any prior attributes that need to be filtered out
+            // Start by removing excluded attributes as well as attributes of interest to allow, say, rewriting
+            // netcoreapp3.1 to use .NET 5 reference annotations.
             for (int i = 0; i < provider.CustomAttributes.Count; i++)
             {
-                if (IsExcludedAnnotation(provider, annotatedProvider, provider.CustomAttributes[i]))
+                var customAttribute = provider.CustomAttributes[i];
+
+                if (attributesOfInterest.ContainsKey(customAttribute.AttributeType.FullName)
+                    || IsExcludedAnnotation(provider, annotatedProvider, customAttribute))
                 {
                     provider.CustomAttributes.RemoveAt(i);
                     i--;
