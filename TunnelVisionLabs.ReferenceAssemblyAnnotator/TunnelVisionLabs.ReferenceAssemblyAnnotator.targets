@@ -111,56 +111,6 @@
           Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp'"
           DependsOnTargets="$(RestoreTargetFrameworkDirectoryDependsOn)"
           BeforeTargets="ResolveAvailableReferenceAssemblies">
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
-      <_TargetFrameworkReferences Include="@(Reference)"
-                                  Condition="
-                                '%(NuGetPackageId)' == 'Microsoft.Win32.Primitives'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.AppContext'
-                                OR '%(NuGetPackageId)' == 'System.Collections'
-                                OR '%(NuGetPackageId)' == 'System.Collections.Concurrent'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.Console'
-                                OR '%(NuGetPackageId)' == 'System.Diagnostics.Debug'
-                                OR '%(NuGetPackageId)' == 'System.Diagnostics.Tools'
-                                OR '%(NuGetPackageId)' == 'System.Diagnostics.Tracing'
-                                OR '%(NuGetPackageId)' == 'System.Globalization'
-                                OR '%(NuGetPackageId)' == 'System.Globalization.Calendars'
-                                OR '%(NuGetPackageId)' == 'System.IO'
-                                OR '%(NuGetPackageId)' == 'System.IO.Compression'
-                                OR '%(NuGetPackageId)' == 'System.IO.Compression.ZipFile'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.IO.FileSystem'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.IO.FileSystem.Primitives'
-                                OR '%(NuGetPackageId)' == 'System.Linq'
-                                OR '%(NuGetPackageId)' == 'System.Linq.Expressions'
-                                OR '%(NuGetPackageId)' == 'System.Net.Http'
-                                OR '%(NuGetPackageId)' == 'System.Net.Primitives'
-                                OR '%(NuGetPackageId)' == 'System.Net.Sockets'
-                                OR '%(NuGetPackageId)' == 'System.ObjectModel'
-                                OR '%(NuGetPackageId)' == 'System.Reflection'
-                                OR '%(NuGetPackageId)' == 'System.Reflection.Extensions'
-                                OR '%(NuGetPackageId)' == 'System.Reflection.Primitives'
-                                OR '%(NuGetPackageId)' == 'System.Resources.ResourceManager'
-                                OR '%(NuGetPackageId)' == 'System.Runtime'
-                                OR '%(NuGetPackageId)' == 'System.Runtime.Extensions'
-                                OR '%(NuGetPackageId)' == 'System.Runtime.Handles'
-                                OR '%(NuGetPackageId)' == 'System.Runtime.InteropServices'
-                                OR '%(NuGetPackageId)' == 'System.Runtime.InteropServices.RuntimeInformation'
-                                OR '%(NuGetPackageId)' == 'System.Runtime.Numerics'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Algorithms'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Encoding'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Primitives'
-                                OR '%(NuGetPackageId)' == 'XXXSystem.Security.Cryptography.X509Certificates'
-                                OR '%(NuGetPackageId)' == 'System.Text.Encoding'
-                                OR '%(NuGetPackageId)' == 'System.Text.Encoding.Extensions'
-                                OR '%(NuGetPackageId)' == 'System.Text.RegularExpressions'
-                                OR '%(NuGetPackageId)' == 'System.Threading'
-                                OR '%(NuGetPackageId)' == 'System.Threading.Tasks'
-                                OR '%(NuGetPackageId)' == 'System.Threading.Timer'
-                                OR '%(NuGetPackageId)' == 'System.Xml.ReaderWriter'
-                                OR '%(NuGetPackageId)' == 'System.Xml.XDocument'" />
-      <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(_TargetFrameworkReferences.Identity)'))" />
-      <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
-    </ItemGroup>
-
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
       <!-- .NET Standard 2.0 -->
       <_NuGetPackageFoldersItems Include="$(NuGetPackageFolders)" />
@@ -173,7 +123,8 @@
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
+    <ItemGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp')
+                          AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
       <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(ResolvedCompileFileDefinitionsToAdd.Identity)'))" />
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
@@ -224,55 +175,6 @@
                                         OR '%(Reference.Identity)' == 'System.Xml.Linq')" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
-      <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
-                                    Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')
-                                      AND ('%(Reference.NuGetPackageId)' == 'Microsoft.Win32.Primitives'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.AppContext'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Collections'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Collections.Concurrent'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.Console'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Diagnostics.Debug'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Diagnostics.Tools'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Diagnostics.Tracing'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Globalization'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Globalization.Calendars'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.IO'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.IO.Compression'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.IO.Compression.ZipFile'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.IO.FileSystem'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.IO.FileSystem.Primitives'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Linq'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Linq.Expressions'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Net.Http'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Net.Primitives'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Net.Sockets'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.ObjectModel'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Reflection'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Reflection.Extensions'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Reflection.Primitives'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Resources.ResourceManager'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime.Extensions'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime.Handles'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime.InteropServices'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime.InteropServices.RuntimeInformation'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Runtime.Numerics'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Algorithms'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Encoding'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.Security.Cryptography.Primitives'
-                                        OR '%(Reference.NuGetPackageId)' == 'XXXSystem.Security.Cryptography.X509Certificates'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Text.Encoding'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Text.Encoding.Extensions'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Text.RegularExpressions'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Threading'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Threading.Tasks'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Threading.Timer'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Xml.ReaderWriter'
-                                        OR '%(Reference.NuGetPackageId)' == 'System.Xml.XDocument')"
-                                    OriginalReference="%(Reference.Identity)" />
-    </ItemGroup>
-
     <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(NETStandardLibraryPackageVersion)' != ''">
       <!-- .NET Standard 2.0 -->
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
@@ -286,7 +188,8 @@
                                     OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
+    <ItemGroup Condition="('$(TargetFrameworkIdentifier)' == '.NETStandard' OR '$(TargetFrameworkIdentifier)' == '.NETCoreApp')
+                          AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
       <UnannotatedReferenceAssembly Include="@(ResolvedCompileFileDefinitionsToAdd->'%(FileName)')"
                                     Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(ResolvedCompileFileDefinitionsToAdd.FileName)%(ResolvedCompileFileDefinitionsToAdd.Extension)')"
                                     OriginalReference="%(ResolvedCompileFileDefinitionsToAdd.Identity)" />
