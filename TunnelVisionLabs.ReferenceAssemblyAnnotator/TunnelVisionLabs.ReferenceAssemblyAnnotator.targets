@@ -29,7 +29,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '3.0'">
-    <!-- This is the target that first produces the Reference items needed by each of these targets. -->
+    <!-- This is the target that first produces the Reference or ResolvedCompileFileDefinitionsToAdd items needed by each of these targets. -->
     <RestoreTargetFrameworkDirectoryDependsOn>ResolveLockFileReferences</RestoreTargetFrameworkDirectoryDependsOn>
     <AddStandardAssembliesForAnnotationDependsOn>ResolveLockFileReferences</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
