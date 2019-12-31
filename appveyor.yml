@@ -15,6 +15,8 @@ test_script:
 - git clean -dxf tests
 - msbuild /restore tests/MultiTFM /warnaserror /v:m
 - git clean -dxf tests
+- msbuild /restore tests/RefVersion3.1.0 /warnaserror /v:m
+- git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=net35 /warnaserror /v:m
 - git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=net48 /warnaserror /v:m
@@ -29,6 +31,9 @@ test_script:
 
 - git clean -dxf tests
 - dotnet msbuild -restore tests/MultiTFM -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/RefVersion3.1.0 -warnaserror -v:m
 - taskkill /im dotnet.exe /f
 - git clean -dxf tests
 - dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net35 -warnaserror -v:m
