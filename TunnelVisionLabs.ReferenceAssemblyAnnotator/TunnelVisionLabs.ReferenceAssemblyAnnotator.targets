@@ -29,6 +29,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionLessThan($(TargetFrameworkVersion), '3.0'))">
+    <!-- This is the target that first produces the Reference items needed by each of these targets. -->
     <RestoreTargetFrameworkDirectoryDependsOn>ResolveLockFileReferences</RestoreTargetFrameworkDirectoryDependsOn>
     <AddStandardAssembliesForAnnotationDependsOn>ResolveLockFileReferences</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
@@ -36,6 +37,7 @@
   <PropertyGroup Condition="
                  ('$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '3.0')))
                  OR ('$(TargetFrameworkIdentifier)' == '.NETStandard' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1')))">
+    <!-- This is the target that first produces the Reference items needed by each of these targets. -->
     <RestoreTargetFrameworkDirectoryDependsOn>ResolveTargetingPackAssets</RestoreTargetFrameworkDirectoryDependsOn>
     <AddStandardAssembliesForAnnotationDependsOn>ResolveTargetingPackAssets</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
