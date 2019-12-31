@@ -23,13 +23,21 @@
     </ResolveAssemblyReferencesDependsOn>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <AnnotatedReferenceAssemblyDirectory Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">$(NuGetPackageRoot)\microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\netcoreapp3.0\</AnnotatedReferenceAssemblyDirectory>
-  </PropertyGroup>
+  <Target Name="ResolveAnnotatedReferenceAssemblies">
+    <ItemGroup Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">
+      <_AnnotatedReferenceAssemblyDirectoryContents Include="$(NuGetPackageRoot)\microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\*\*.dll" />
+      <_AnnotatedReferenceAssemblyDirectoryItem Include="@(_AnnotatedReferenceAssemblyDirectoryContents->'%(RelativeDir)')" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <AnnotatedReferenceAssembly Include="$(AnnotatedReferenceAssemblyDirectory)*.dll" />
-  </ItemGroup>
+    <PropertyGroup Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">
+      <!-- Take last item -->
+      <AnnotatedReferenceAssemblyDirectory>%(_AnnotatedReferenceAssemblyDirectoryItem.Identity)</AnnotatedReferenceAssemblyDirectory>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <AnnotatedReferenceAssembly Include="$(AnnotatedReferenceAssemblyDirectory)*.dll" />
+    </ItemGroup>
+  </Target>
 
   <Target Name="ResolveAvailableReferenceAssemblies"
           DependsOnTargets="GetReferenceAssemblyPaths">
