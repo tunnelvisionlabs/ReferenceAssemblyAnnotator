@@ -159,7 +159,12 @@
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
+      <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(ResolvedCompileFileDefinitionsToAdd.Identity)'))" />
+      <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.0'">
       <_TargetFrameworkReferences Include="@(Reference)" Condition="'%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App' OR '%(Reference.PackageName)' == 'Microsoft.NETCore.App'" />
       <_TargetFrameworkNuGetPackageFoldersNoSlash Include="$([System.IO.Path]::GetDirectoryName('%(_TargetFrameworkReferences.Identity)'))" />
       <_TargetFrameworkNuGetPackageFolders Include="$([MSBuild]::NormalizeDirectory('%(_TargetFrameworkNuGetPackageFoldersNoSlash.Identity)'))" />
@@ -267,7 +272,13 @@
                                     OriginalReference="%(Reference.Identity)" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &lt; '2.0'">
+      <UnannotatedReferenceAssembly Include="@(ResolvedCompileFileDefinitionsToAdd->'%(FileName)')"
+                                    Condition="Exists('$(AnnotatedReferenceAssemblyDirectory)%(ResolvedCompileFileDefinitionsToAdd.FileName)%(ResolvedCompileFileDefinitionsToAdd.Extension)')"
+                                    OriginalReference="%(ResolvedCompileFileDefinitionsToAdd.Identity)" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.0'">
       <UnannotatedReferenceAssembly Include="@(Reference->'%(FileName)')"
                                     Condition="('%(Reference.FrameworkReferenceName)' == 'Microsoft.NETCore.App' OR '%(Reference.PackageName)' == 'Microsoft.NETCore.App') AND Exists('$(AnnotatedReferenceAssemblyDirectory)%(Reference.FileName)%(Reference.Extension)')"
                                     OriginalReference="%(Reference.Identity)" />
