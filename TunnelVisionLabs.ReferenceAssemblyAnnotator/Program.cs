@@ -25,6 +25,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                     log?.LogWarning("RA1000", "Skipping mixed-mode implementation assembly '{0}'", assemblyDefinition.Name);
                     return;
                 }
+
+                if (module.TypeSystem.Object.Resolve() is null)
+                {
+                    log?.LogWarning("RA1001", "Cannot resolve core library for assembly '{0}', skipping", assemblyDefinition.Name);
+                    return;
+                }
             }
 
             using var annotatedAssemblyResolver = new AssemblyResolver(Path.GetDirectoryName(Path.GetFullPath(annotatedReferenceAssembly))!);
