@@ -23,9 +23,19 @@ test_script:
 - git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /v:m
 - git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.1 /warnaserror /v:m
+- git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.0 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
 - git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.1 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.0 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.1 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.0 /warnaserror /v:m
+- git clean -dxf tests
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.1 /warnaserror /v:m
 
 - git clean -dxf tests
 - dotnet msbuild -restore tests/MultiTFM -warnaserror -v:m
@@ -43,9 +53,24 @@ test_script:
 - dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.0 -warnaserror -v:m
 - taskkill /im dotnet.exe /f
 - git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.1 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
 - dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.0 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
 - taskkill /im dotnet.exe /f
 - git clean -dxf tests
 - dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.1 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.0 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.1 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.0 -warnaserror -v:m
+- taskkill /im dotnet.exe /f
+- git clean -dxf tests
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.1 -warnaserror -v:m
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
