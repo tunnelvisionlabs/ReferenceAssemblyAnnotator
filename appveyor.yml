@@ -13,69 +13,57 @@ build:
   verbosity: minimal
 test_script:
 - git clean -dxf tests
-- msbuild /restore tests/MultiTFM /warnaserror /v:m
+- msbuild /restore tests/MultiTFM /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/RefVersion3.1.0 /warnaserror /v:m
+- msbuild /restore tests/RefVersion3.1.0 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=net35 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=net35 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=net48 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=net48 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard1.6 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard1.6 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.0 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.1 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netstandard2.1 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.0 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.0 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.1 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp1.1 /p:DisableImplicitNuGetFallbackFolder=true /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.0 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.0 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.1 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp2.1 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.0 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.0 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.1 /warnaserror /v:m
+- msbuild /restore tests/SingleTFM /p:TestFramework=netcoreapp3.1 /warnaserror /nr:false /v:m
 
 - git clean -dxf tests
-- dotnet msbuild -restore tests/MultiTFM -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/MultiTFM -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/RefVersion3.1.0 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/RefVersion3.1.0 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net35 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net35 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net48 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net48 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard1.6 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard1.6 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.0 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.0 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.1 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netstandard2.1 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.0 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.0 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.1 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp1.1 -p:DisableImplicitNuGetFallbackFolder=true -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.0 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.0 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.1 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp2.1 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.0 -warnaserror -v:m
-- taskkill /im dotnet.exe /f
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.0 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.1 -warnaserror -v:m
+- dotnet msbuild -restore tests/SingleTFM -p:TestFramework=netcoreapp3.1 -warnaserror -nr:false -v:m
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
