@@ -73,7 +73,9 @@
       <AnnotatedReferenceAssemblyOutputPath Condition="'$(AnnotatedReferenceAssemblyOutputPath)' == ''">$(IntermediateOutputPath)annotated\</AnnotatedReferenceAssemblyOutputPath>
     </PropertyGroup>
     <ItemGroup>
-      <UnannotatedReferenceAssembly Update="@(UnannotatedReferenceAssembly)" OutputAssembly="$(AnnotatedReferenceAssemblyOutputPath)%(Identity).dll" />
+      <UnannotatedReferenceAssembly Update="@(UnannotatedReferenceAssembly)"
+                                    OutputAssembly="$(AnnotatedReferenceAssemblyOutputPath)%(Identity).dll"
+                                    OutputDocumentationFile="$(AnnotatedReferenceAssemblyOutputPath)%(Identity).xml" />
     </ItemGroup>
   </Target>
 
@@ -91,10 +93,12 @@
       OutputPath="$(AnnotatedReferenceAssemblyOutputPath)"
       DisabledWarnings="$(NoWarn)">
       <Output ItemName="GeneratedReferenceAssemblies" TaskParameter="GeneratedAssemblies" />
+      <Output ItemName="GeneratedDocumentationFiles" TaskParameter="GeneratedDocumentationFiles" />
     </AnnotatorBuildTask>
 
     <ItemGroup>
       <FileWrites Include="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')" />
+      <FileWrites Include="@(UnannotatedReferenceAssembly->'%(OutputDocumentationFile)')" />
     </ItemGroup>
 
     <PropertyGroup>
