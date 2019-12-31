@@ -9,6 +9,7 @@
 
   <PropertyGroup>
     <AnnotateReferenceAssembliesDependsOn>
+      ResolveAnnotatedReferenceAssemblies;
       ResolveAvailableReferenceAssemblies;
       ResolveOutputReferenceAssemblies
     </AnnotateReferenceAssembliesDependsOn>
