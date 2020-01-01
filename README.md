@@ -1,6 +1,6 @@
 ﻿# Reference Assembly Annotator
 
-IL weaver for adding nullability annotations to .NET Framework and .NET Standard reference assemblies.
+IL weaver for adding nullability annotations to .NET Framework, .NET Standard, and .NET Core reference assemblies.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/pikrerggo7mi7dy5/branch/master?svg=true)](https://ci.appveyor.com/project/sharwell/referenceassemblyannotator/branch/master)
 
@@ -31,16 +31,18 @@ IL weaver for adding nullability annotations to .NET Framework and .NET Standard
     * System.Xml.Linq
 * .NET Standard targets
     * All assemblies which are defined by the .NET Standard
+* .NET Core targets
+    * All reference assemblies defined by .NET Core
 
 ### Example configuration
 
 ```xml
 <PropertyGroup>
   <!-- Specifies the version of this rewriter to use. -->
-  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.77</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
+  <TunnelVisionLabsReferenceAssemblyAnnotatorVersion>1.0.0-alpha.138</TunnelVisionLabsReferenceAssemblyAnnotatorVersion>
 
   <!-- Specifies the version of Microsoft.NETCore.App.Ref to obtain nullability information from. -->
-  <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
+  <AnnotatedReferenceAssemblyVersion>3.1.0</AnnotatedReferenceAssemblyVersion>
 
   <!-- Includes the nullable attributes from dotnet/coreclr as source code with 'internal' accessibility. Set this to
        false if the attributes are included from another source and/or are not needed. -->
@@ -57,10 +59,10 @@ Minimal:
 
 ```xml
 <PropertyGroup>
-  <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
+  <AnnotatedReferenceAssemblyVersion>3.1.0</AnnotatedReferenceAssemblyVersion>
 </PropertyGroup>
 <ItemGroup>
-  <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.77" PrivateAssets="all" />
+  <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.138" PrivateAssets="all" />
   <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
 </ItemGroup>
 ```
