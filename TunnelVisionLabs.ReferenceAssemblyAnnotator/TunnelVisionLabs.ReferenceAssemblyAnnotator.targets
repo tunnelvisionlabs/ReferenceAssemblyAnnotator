@@ -3,6 +3,14 @@
 
   <UsingTask TaskName="TunnelVisionLabs.ReferenceAssemblyAnnotator.AnnotatorBuildTask" AssemblyFile="$(ReferenceAssemblyAnnotatorBuildTaskPath)TunnelVisionLabs.ReferenceAssemblyAnnotator.dll" />
 
+  <PropertyGroup Condition="'$(AnnotatedReferenceAssemblyPackageName)' != ''">
+    <AnnotatedReferenceAssemblyPackageName>Microsoft.NETCore.App.Ref</AnnotatedReferenceAssemblyPackageName>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(AnnotatedReferenceAssemblyVersion)' != ''">
+    <PackageDownload Include="$(AnnotatedReferenceAssemblyPackageName)" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
+  </ItemGroup>
+
   <PropertyGroup>
     <_FrameworkIncludesNullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '3.0'">true</_FrameworkIncludesNullableAttributes>
     <_FrameworkIncludesNullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$(TargetFrameworkVersion.Substring(1))' &gt;= '2.1'">true</_FrameworkIncludesNullableAttributes>
