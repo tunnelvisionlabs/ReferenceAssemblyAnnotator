@@ -4,7 +4,6 @@
     <TargetFramework>$(TestFramework)</TargetFramework>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
-    <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
     <NoWarn>RA1000</NoWarn>
   </PropertyGroup>
 
@@ -21,7 +20,7 @@
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' != 'net35'" Include="System.Data.SqlClient" Version="4.8.0" />
     <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.*" PrivateAssets="all" />
-    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
+    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[3.0.0]" />
   </ItemGroup>
 
 </Project>
