@@ -4,19 +4,21 @@
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
+    using System.Linq;
     using Mono.Cecil;
 
     internal sealed class AssemblyResolver : IAssemblyResolver
     {
         private static readonly ReaderParameters DefaultReaderParameters = new ReaderParameters(ReadingMode.Deferred);
 
-        private readonly string _searchDirectory;
+        private readonly ImmutableArray<string> _searchDirectories;
         private readonly Dictionary<string, AssemblyDefinition?> _assembliesByFileName = new Dictionary<string, AssemblyDefinition?>();
 
-        public AssemblyResolver(string searchDirectory)
+        public AssemblyResolver(ImmutableArray<string> searchDirectories)
         {
-            _searchDirectory = searchDirectory;
+            _searchDirectories = searchDirectories;
         }
 
         public AssemblyDefinition? Resolve(AssemblyNameReference name)
@@ -28,7 +30,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         {
             if (!_assembliesByFileName.TryGetValue(name.Name, out var assembly))
             {
-                var stream = OpenReadIfExists(Path.Combine(_searchDirectory, name.Name + ".dll"));
+                var stream = _searchDirectories
+                    .Select(directory => OpenReadIfExists(Path.Combine(directory, name.Name + ".dll")))
+                    .FirstOrDefault(s => s is object);
 
                 assembly = stream is null ? null : AssemblyDefinition.ReadAssembly(stream, parameters);
 
@@ -57,7 +61,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private static bool Matches(AssemblyNameDefinition definition, AssemblyNameReference reference)
         {
             return definition.Name == reference.Name
-                && definition.Version == reference.Version;
+                && definition.Version >= reference.Version;
         }
 
         public void Dispose()

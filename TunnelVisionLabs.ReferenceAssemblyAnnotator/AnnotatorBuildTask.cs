@@ -4,6 +4,7 @@
 namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using System;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using Microsoft.Build.Framework;
@@ -96,7 +97,14 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             Directory.CreateDirectory(OutputPath);
             string outputAssembly = Path.Combine(OutputPath, Path.GetFileName(unannotatedReferenceAssembly));
-            Program.Main(log, unannotatedReferenceAssembly, annotatedReferenceAssembly, outputAssembly);
+
+            Program.Main(
+                log,
+                unannotatedReferenceAssembly,
+                TargetFrameworkDirectories.Select(item => item.ItemSpec).ToImmutableArray(),
+                annotatedReferenceAssembly,
+                outputAssembly);
+
             GeneratedAssemblies = new[] { new TaskItem(outputAssembly) };
 
             string sourceDocumentation = Path.ChangeExtension(unannotatedReferenceAssembly, ".xml");

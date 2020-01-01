@@ -5,6 +5,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Immutable;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -13,9 +14,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
     internal class Program
     {
-        internal static void Main(SuppressibleLoggingHelper? log, string referenceAssembly, string annotatedReferenceAssembly, string outputAssembly)
+        internal static void Main(SuppressibleLoggingHelper? log, string referenceAssembly, ImmutableArray<string> targetFrameworkDirectories, string annotatedReferenceAssembly, string outputAssembly)
         {
-            using var assemblyResolver = new AssemblyResolver(Path.GetDirectoryName(Path.GetFullPath(referenceAssembly))!);
+            using var assemblyResolver = new AssemblyResolver(targetFrameworkDirectories);
             using var assemblyDefinition = AssemblyDefinition.ReadAssembly(referenceAssembly, new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = assemblyResolver });
 
             foreach (var module in assemblyDefinition.Modules)
@@ -33,7 +34,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 }
             }
 
-            using var annotatedAssemblyResolver = new AssemblyResolver(Path.GetDirectoryName(Path.GetFullPath(annotatedReferenceAssembly))!);
+            using var annotatedAssemblyResolver = new AssemblyResolver(ImmutableArray.Create(Path.GetDirectoryName(Path.GetFullPath(annotatedReferenceAssembly))!));
             using var annotatedAssemblyDefinition = AssemblyDefinition.ReadAssembly(annotatedReferenceAssembly, new ReaderParameters(ReadingMode.Deferred) { AssemblyResolver = annotatedAssemblyResolver });
 
             var wellKnownTypes = new WellKnownTypes(assemblyDefinition);
