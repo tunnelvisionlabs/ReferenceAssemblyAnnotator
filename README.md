@@ -51,7 +51,6 @@ IL weaver for adding nullability annotations to .NET Framework, .NET Standard, a
 
 <ItemGroup>
   <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="$(TunnelVisionLabsReferenceAssemblyAnnotatorVersion)" PrivateAssets="all" />
-  <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
 </ItemGroup>
 ```
 
@@ -63,7 +62,6 @@ Minimal:
 </PropertyGroup>
 <ItemGroup>
   <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.138" PrivateAssets="all" />
-  <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
 </ItemGroup>
 ```
 

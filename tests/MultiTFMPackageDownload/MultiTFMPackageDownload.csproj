@@ -26,6 +26,7 @@
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' != 'net35'" Include="System.Data.SqlClient" Version="4.8.0" />
     <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.*" PrivateAssets="all" />
+    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
   </ItemGroup>
 
 </Project>

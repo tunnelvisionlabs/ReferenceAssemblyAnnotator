@@ -1,16 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net35;net48;netstandard1.6;netstandard2.0;netstandard2.1;netcoreapp1.0;netcoreapp1.1;netcoreapp2.0;netcoreapp2.1;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>$(TestFramework)</TargetFramework>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
     <AnnotatedReferenceAssemblyVersion>3.0.0</AnnotatedReferenceAssemblyVersion>
     <NoWarn>RA1000</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- NuGet cannot restore packages for netcoreapp1.0: https://github.com/NuGet/Home/issues/7414 -->
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp1.0' OR '$(TargetFramework)' == 'netcoreapp1.1'">
@@ -26,6 +21,7 @@
   <ItemGroup>
     <PackageReference Condition="'$(TargetFramework)' != 'net35'" Include="System.Data.SqlClient" Version="4.8.0" />
     <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.*" PrivateAssets="all" />
+    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[$(AnnotatedReferenceAssemblyVersion)]" />
   </ItemGroup>
 
 </Project>
