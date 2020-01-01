@@ -153,7 +153,6 @@
     </When>
   </Choose>
 
-  <!-- Automatically annotate .NET Standard assemblies -->
   <Target Name="AddStandardAssembliesForAnnotation"
           DependsOnTargets="$(AddStandardAssembliesForAnnotationDependsOn)"
           BeforeTargets="ResolveOutputReferenceAssemblies">
