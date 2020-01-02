@@ -42,7 +42,32 @@
     <AddStandardAssembliesForAnnotationDependsOn>ResolveTargetingPackAssets</AddStandardAssembliesForAnnotationDependsOn>
   </PropertyGroup>
 
-  <Target Name="ResolveAnnotatedReferenceAssemblies">
+  <Target Name="DetermineAnnotationPackageDownloadVersion">          
+    <ItemGroup>
+      <_CandidatePackageDownloadVersion Include="@(PackageDownload->'%(Version)'->Distinct())" Condition="'%(PackageDownload.Identity)' == 'Microsoft.NETCore.App.Ref'" />
+    </ItemGroup>
+
+    <Error Condition="@(_CandidatePackageDownloadVersion->Count()) &lt; 1" 
+           Text="Add a 'PackageDownload' project item to include Microsoft.NETCore.App.Ref at the desired version to obtain nullability information from."
+           Code="RA0000" />
+
+    <Error Condition="'$(AnnotatedReferenceAssemblyVersion)' == '' AND @(_CandidatePackageDownloadVersion->Count()) &gt; 1"
+           Text="There is more than one PackageDownload of Microsoft.NETCore.App.Ref. Set the 'AnnotatedReferenceAssemblyVersion' build property to the version to obtain nullability information from."
+           Code="RA0001" />
+
+    <Error Condition="'$(AnnotatedReferenceAssemblyVersion)' != '' 
+                      AND @(_CandidatePackageDownloadVersion->WithMetadataValue('Identity', '[$(AnnotatedReferenceAssemblyVersion)]')->Count()) &lt; 1"
+           Text="There is no PackageDownload of Microsoft.NETCore.App.Ref with the version specified by the 'AnnotatedReferenceAssemblyVersion' build property."
+           Code="RA0002" />
+
+    <PropertyGroup Condition="'$(AnnotatedReferenceAssemblyVersion)' == ''">
+      <_AnnotatedReferenceAssemblyVersionWithSquareBrackets>@(_CandidatePackageDownloadVersion)</_AnnotatedReferenceAssemblyVersionWithSquareBrackets>
+      <AnnotatedReferenceAssemblyVersion>$(_AnnotatedReferenceAssemblyVersionWithSquareBrackets.TrimStart('[').TrimEnd(']'))</AnnotatedReferenceAssemblyVersion>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="ResolveAnnotatedReferenceAssemblies"
+          DependsOnTargets="DetermineAnnotationPackageDownloadVersion">
     <ItemGroup Condition="'$(AnnotatedReferenceAssemblyDirectory)' == ''">
       <_AnnotatedReferenceAssemblyDirectoryContents Include="$(NuGetPackageRoot)\microsoft.netcore.app.ref\$(AnnotatedReferenceAssemblyVersion)\ref\*\*.dll" />
       <_AnnotatedReferenceAssemblyDirectoryItem Include="@(_AnnotatedReferenceAssemblyDirectoryContents->'%(RelativeDir)')" />
@@ -83,8 +108,6 @@
           DependsOnTargets="$(AnnotateReferenceAssembliesDependsOn)"
           Inputs="@(AvailableUnannotatedReferenceAssembly);@(AnnotatedReferenceAssembly)"
           Outputs="@(UnannotatedReferenceAssembly->'%(OutputAssembly)')">
-
-    <Error Condition="'$(AnnotatedReferenceAssemblyVersion)' == ''" Text="The 'AnnotatedReferenceAssemblyVersion' build property was not set." Code="RA0000" />
 
     <AnnotatorBuildTask
       UnannotatedReferenceAssembly="%(UnannotatedReferenceAssembly.Identity)"
