@@ -14,7 +14,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly ImmutableHashSet<string> _disabledWarnings;
         private readonly string _requiredPrefix;
 
-        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string disabledWarnings)
+        public SuppressibleLoggingHelper(TaskLoggingHelper helper, string requiredPrefix, string? disabledWarnings)
         {
             _helper = helper;
 
@@ -24,10 +24,11 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             _requiredPrefix = requiredPrefix;
 
             _disabledWarnings = disabledWarnings
-                .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                ?.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(item => item.Trim())
                 .Where(item => item.StartsWith(requiredPrefix, StringComparison.Ordinal))
-                .ToImmutableHashSet(StringComparer.Ordinal);
+                .ToImmutableHashSet(StringComparer.Ordinal)
+                ?? ImmutableHashSet<string>.Empty;
         }
 
         public void LogWarning(string warningCode, string message, params object?[] messageArgs)
