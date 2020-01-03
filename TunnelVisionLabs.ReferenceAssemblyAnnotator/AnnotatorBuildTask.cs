@@ -19,7 +19,6 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             TargetFrameworkDirectories = null!;
             AnnotatedReferenceAssemblyDirectory = null!;
             OutputPath = null!;
-            DisabledWarnings = null!;
         }
 
         [Required]
@@ -50,7 +49,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             set;
         }
 
-        public string DisabledWarnings
+        public string? DisabledWarnings
         {
             get;
             set;
