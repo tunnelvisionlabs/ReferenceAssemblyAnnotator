@@ -104,7 +104,14 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             string targetDocumentation = Path.ChangeExtension(outputAssembly, ".xml");
             if (File.Exists(sourceDocumentation))
             {
-                File.Copy(sourceDocumentation, targetDocumentation);
+                try
+                {
+                    File.Copy(sourceDocumentation, targetDocumentation);
+                }
+                catch (IOException ex) when ((WindowsErrorCode)ex.HResult == WindowsErrorCode.FileExists)
+                {
+                }
+
                 GeneratedDocumentationFiles = new[] { new TaskItem(targetDocumentation) };
             }
             else
