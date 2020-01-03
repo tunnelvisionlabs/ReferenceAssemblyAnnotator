@@ -102,7 +102,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
 
             string sourceDocumentation = Path.ChangeExtension(unannotatedReferenceAssembly, ".xml");
             string targetDocumentation = Path.ChangeExtension(outputAssembly, ".xml");
-            if (File.Exists(sourceDocumentation))
+            if (File.Exists(sourceDocumentation) && !File.Exists(targetDocumentation))
             {
                 try
                 {
