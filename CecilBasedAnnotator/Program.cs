@@ -3,11 +3,18 @@
 
 namespace CecilBasedAnnotator
 {
+    using System.Collections.Immutable;
+
     internal class Program
     {
         private static void Main(string[] args)
         {
-            TunnelVisionLabs.ReferenceAssemblyAnnotator.Program.Main(log: null, args[0], args[1], args[2]);
+            TunnelVisionLabs.ReferenceAssemblyAnnotator.Program.Main(
+                log: null,
+                referenceAssembly: args[0],
+                targetFrameworkDirectories: args[1].Split(';').ToImmutableArray(),
+                annotatedReferenceAssembly: args[2],
+                outputAssembly: args[3]);
         }
     }
 }
