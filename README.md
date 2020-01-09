@@ -38,9 +38,11 @@ IL weaver for adding nullability annotations to .NET Framework, .NET Standard, a
 
 ```xml
 <PropertyGroup>
-  <!-- Includes the nullable attributes from dotnet/coreclr as source code with 'internal' accessibility. Set this to
-       false if the attributes are included from another source and/or are not needed. -->
-  <GenerateNullableAttributes>true</GenerateNullableAttributes>
+  <!-- By default, the nullable attributes from dotnet/coreclr are included as source code with 'internal'
+       accessibility. Uncomment to suppress this if the attributes are included from another source and/or
+       are not needed. -->
+  
+  <!-- <GenerateNullableAttributes>false</GenerateNullableAttributes> -->
 </PropertyGroup>
 
 <ItemGroup>
