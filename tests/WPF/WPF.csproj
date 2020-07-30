@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <!-- Using net40 instead of net35. jnm2.ReferenceAssemblies.net35 isn't automatically referenced by the .NET Core SDK like
+         Microsoft.NETFramework.ReferenceAssemblies is, and therefore it doesn't provide assemblies to the WPF temp assembly project. -->
+    <TargetFrameworks>net40;net48;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
+    <NoWarn>RA1000</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' != 'net40'" Include="System.Data.SqlClient" Version="4.8.0" />
+    <PackageReference Include="TunnelVisionLabs.ReferenceAssemblyAnnotator" Version="1.0.0-alpha.*" PrivateAssets="all" />
+    <PackageDownload Include="Microsoft.NETCore.App.Ref" Version="[3.1.0]" />
+  </ItemGroup>
+
+</Project>
