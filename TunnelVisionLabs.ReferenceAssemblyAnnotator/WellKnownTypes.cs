@@ -27,6 +27,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute = new DoesNotReturnIfAttributeProvidedType();
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisMaybeNullAttribute = new MaybeNullAttributeProvidedType();
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisMaybeNullWhenAttribute = new MaybeNullWhenAttributeProvidedType();
+        private readonly WellKnownType _systemDiagnosticsCodeAnalysisMemberNotNullAttribute = new MemberNotNullAttributeProvidedType();
+        private readonly WellKnownType _systemDiagnosticsCodeAnalysisMemberNotNullWhenAttribute = new MemberNotNullWhenAttributeProvidedType();
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisNotNullAttribute = new NotNullAttributeProvidedType();
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute = new NotNullIfNotNullAttributeProvidedType();
         private readonly WellKnownType _systemDiagnosticsCodeAnalysisNotNullWhenAttribute = new NotNullWhenAttributeProvidedType();
@@ -69,6 +71,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 LazyThreadSafetyMode.ExecutionAndPublication);
             SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute = new Lazy<TypeReference>(
                 () => _systemDiagnosticsCodeAnalysisMaybeNullWhenAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            SystemDiagnosticsCodeAnalysisMemberNotNullAttribute = new Lazy<TypeReference>(
+                () => _systemDiagnosticsCodeAnalysisMemberNotNullAttribute.GetOrCreateTypeReference(Module, this),
+                LazyThreadSafetyMode.ExecutionAndPublication);
+            SystemDiagnosticsCodeAnalysisMemberNotNullWhenAttribute = new Lazy<TypeReference>(
+                () => _systemDiagnosticsCodeAnalysisMemberNotNullWhenAttribute.GetOrCreateTypeReference(Module, this),
                 LazyThreadSafetyMode.ExecutionAndPublication);
             SystemDiagnosticsCodeAnalysisNotNullAttribute = new Lazy<TypeReference>(
                 () => _systemDiagnosticsCodeAnalysisNotNullAttribute.GetOrCreateTypeReference(Module, this),
@@ -114,6 +122,10 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         public Lazy<TypeReference> SystemDiagnosticsCodeAnalysisMaybeNullAttribute { get; }
 
         public Lazy<TypeReference> SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute { get; }
+
+        public Lazy<TypeReference> SystemDiagnosticsCodeAnalysisMemberNotNullAttribute { get; }
+
+        public Lazy<TypeReference> SystemDiagnosticsCodeAnalysisMemberNotNullWhenAttribute { get; }
 
         public Lazy<TypeReference> SystemDiagnosticsCodeAnalysisNotNullAttribute { get; }
 

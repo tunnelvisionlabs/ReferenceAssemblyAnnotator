@@ -54,6 +54,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisDoesNotReturnIfAttribute);
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullAttribute);
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMaybeNullWhenAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMemberNotNullAttribute);
+            AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisMemberNotNullWhenAttribute);
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullAttribute);
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullIfNotNullAttribute);
             AddAttributeOfInterest(attributesOfInterest, wellKnownTypes.SystemDiagnosticsCodeAnalysisNotNullWhenAttribute);
