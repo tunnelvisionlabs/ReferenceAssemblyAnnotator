@@ -13,6 +13,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         private readonly WellKnownType _systemAttribute = new PredefinedType(typeof(Attribute));
         private readonly WellKnownType _systemAttributeTargets = new PredefinedType(typeof(AttributeTargets));
         private readonly WellKnownType _systemAttributeUsageAttribute = new PredefinedType(typeof(AttributeUsageAttribute));
+        private readonly WellKnownType _systemParamArrayAttribute = new PredefinedType(typeof(ParamArrayAttribute));
         private readonly WellKnownType _systemRuntimeCompilerServicesCompilerGeneratedAttribute = new PredefinedType(typeof(CompilerGeneratedAttribute));
 
         private readonly WellKnownType _systemRuntimeCompilerServicesReferenceAssemblyAttribute = new ReferenceAssemblyAttributeProvidedType();
@@ -98,6 +99,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         public TypeReference SystemAttributeTargets => _systemAttributeTargets.GetOrCreateTypeReference(Module, this);
 
         public TypeReference SystemAttributeUsageAttribute => _systemAttributeUsageAttribute.GetOrCreateTypeReference(Module, this);
+
+        public TypeReference SystemParamArrayAttribute => _systemParamArrayAttribute.GetOrCreateTypeReference(Module, this);
 
         public TypeReference SystemRuntimeCompilerServicesCompilerGeneratedAttribute => _systemRuntimeCompilerServicesCompilerGeneratedAttribute.GetOrCreateTypeReference(Module, this);
 

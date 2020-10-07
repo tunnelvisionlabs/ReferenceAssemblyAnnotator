@@ -23,9 +23,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 constructor1.Parameters.Add(new ParameterDefinition("member", ParameterAttributes.None, wellKnownTypes.TypeSystem.String));
                 attribute.Methods.Add(constructor1);
 
+                var members = new ParameterDefinition("members", ParameterAttributes.None, wellKnownTypes.TypeSystem.String.MakeArrayType());
+                members.CustomAttributes.Add(attributeFactory.ParamArray());
+
                 var constructor2 = MethodFactory.Constructor(wellKnownTypes.TypeSystem);
-                constructor1.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
-                constructor2.Parameters.Add(new ParameterDefinition("members", ParameterAttributes.None, wellKnownTypes.TypeSystem.String.MakeArrayType()));
+                constructor2.Parameters.Add(new ParameterDefinition("parameterValue", ParameterAttributes.None, wellKnownTypes.TypeSystem.Boolean));
+                constructor2.Parameters.Add(members);
                 attribute.Methods.Add(constructor2);
 
                 attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, inherited: false, allowMultiple: true));
