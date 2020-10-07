@@ -29,6 +29,8 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
                 constructor2.Parameters.Add(members);
                 attribute.Methods.Add(constructor2);
 
+                attribute.CustomAttributes.Add(attributeFactory.NullableContext(1));
+                attribute.CustomAttributes.Add(attributeFactory.Nullable(0));
                 attribute.CustomAttributes.Add(attributeFactory.AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, inherited: false, allowMultiple: true));
             }
         }
