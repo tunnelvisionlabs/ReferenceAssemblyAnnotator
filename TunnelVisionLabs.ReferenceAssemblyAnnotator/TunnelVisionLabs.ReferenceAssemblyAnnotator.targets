@@ -12,8 +12,8 @@
     <_FrameworkIncludesGen2NullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0'))">true</_FrameworkIncludesGen2NullableAttributes>
     <_FrameworkIncludesGen2NullableAttributes Condition="'$(_FrameworkIncludesGen2NullableAttributes)' == ''">false</_FrameworkIncludesGen2NullableAttributes>
 
-    <GenerateGen1NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen1NullableAttributes)' != 'true'">true</GenerateGen1NullableAttributes>
-    <GenerateGen2NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen2NullableAttributes)' != 'true'">true</GenerateGen2NullableAttributes>
+    <GenerateGen1NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND '$(_FrameworkIncludesGen1NullableAttributes)' != 'true'">true</GenerateGen1NullableAttributes>
+    <GenerateGen2NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND '$(_FrameworkIncludesGen2NullableAttributes)' != 'true'">true</GenerateGen2NullableAttributes>
 
     <Gen1NullableAttributesPath Condition="'$(Gen1NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes.gen1$(DefaultLanguageSourceExtension)</Gen1NullableAttributesPath>
     <Gen2NullableAttributesPath Condition="'$(Gen2NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes.gen2$(DefaultLanguageSourceExtension)</Gen2NullableAttributesPath>
