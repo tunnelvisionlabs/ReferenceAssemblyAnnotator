@@ -11,7 +11,7 @@ Imports System.Diagnostics
 
 Namespace Global.System.Diagnostics.CodeAnalysis
 
-#If Not NETCOREAPP And Not NETSTANDARD2_1 Then
+#If Not SUPPORTS_GEN1_NULLABLE_ATTRIBUTES Then
     ''' <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
     <AttributeUsage(AttributeTargets.Field Or AttributeTargets.Parameter Or AttributeTargets.Property, Inherited:=False)>
     Friend NotInheritable Class AllowNullAttribute
@@ -112,7 +112,7 @@ Namespace Global.System.Diagnostics.CodeAnalysis
     End Class
 #End If
 
-#If Not NET Then
+#If Not SUPPORTS_GEN2_NULLABLE_ATTRIBUTES Then
     ''' <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
     <AttributeUsage(AttributeTargets.Method Or AttributeTargets.Property, Inherited:=False, AllowMultiple:=True)>
     Friend NotInheritable Class MemberNotNullAttribute

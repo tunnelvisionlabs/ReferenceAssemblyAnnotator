@@ -4,13 +4,23 @@
   <UsingTask TaskName="TunnelVisionLabs.ReferenceAssemblyAnnotator.AnnotatorBuildTask" AssemblyFile="$(ReferenceAssemblyAnnotatorBuildTaskPath)TunnelVisionLabs.ReferenceAssemblyAnnotator.dll" />
 
   <PropertyGroup>
+    <_FrameworkIncludesGen1NullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '3.0'))">true</_FrameworkIncludesGen1NullableAttributes>
+    <_FrameworkIncludesGen1NullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard' AND '$([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '2.1'))">true</_FrameworkIncludesGen1NullableAttributes>
+    <_FrameworkIncludesGen1NullableAttributes Condition="'$(_FrameworkIncludesGen1NullableAttributes)' == ''">false</_FrameworkIncludesGen1NullableAttributes>
+    
     <!-- Note: only .NET 5.0 and higher include the full set of nullable attributes. -->
-    <_FrameworkIncludesNullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0'))">true</_FrameworkIncludesNullableAttributes>
-    <_FrameworkIncludesNullableAttributes Condition="'$(_FrameworkIncludesNullableAttributes)' == ''">false</_FrameworkIncludesNullableAttributes>
+    <_FrameworkIncludesGen2NullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0'))">true</_FrameworkIncludesGen2NullableAttributes>
+    <_FrameworkIncludesGen2NullableAttributes Condition="'$(_FrameworkIncludesGen2NullableAttributes)' == ''">false</_FrameworkIncludesGen2NullableAttributes>
 
-    <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND '$(_FrameworkIncludesNullableAttributes)' != 'true'">true</GenerateNullableAttributes>
+    <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen1NullableAttributes)' != 'true' OR
+                                                                                      '$(_FrameworkIncludesGen2NullableAttributes)' != 'true')">true</GenerateNullableAttributes>
 
     <NullableAttributesPath Condition="'$(NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes$(DefaultLanguageSourceExtension)</NullableAttributesPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants Condition="'$(_FrameworkIncludesGen1NullableAttributes)' == 'true'">$(DefineConstants);SUPPORTS_GEN1_NULLABLE_ATTRIBUTES</DefineConstants>
+    <DefineConstants Condition="'$(_FrameworkIncludesGen2NullableAttributes)' == 'true'">$(DefineConstants);SUPPORTS_GEN2_NULLABLE_ATTRIBUTES</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(GenerateNullableAttributes)' == 'true' AND Exists($(NullableAttributesPath))">
