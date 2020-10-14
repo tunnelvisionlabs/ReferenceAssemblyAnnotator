@@ -11,6 +11,7 @@ Imports System.Diagnostics
 
 Namespace Global.System.Diagnostics.CodeAnalysis
 
+#If Not NETCOREAPP And Not NETSTANDARD2_1 Then
     ''' <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
     <AttributeUsage(AttributeTargets.Field Or AttributeTargets.Parameter Or AttributeTargets.Property, Inherited:=False)>
     Friend NotInheritable Class AllowNullAttribute
@@ -109,7 +110,9 @@ Namespace Global.System.Diagnostics.CodeAnalysis
         ''' <summary>Gets the condition parameter value.</summary>
         Public ReadOnly Property ParameterValue As Boolean
     End Class
+#End If
 
+#If Not NET Then
     ''' <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
     <AttributeUsage(AttributeTargets.Method Or AttributeTargets.Property, Inherited:=False, AllowMultiple:=True)>
     Friend NotInheritable Class MemberNotNullAttribute
@@ -170,5 +173,6 @@ Namespace Global.System.Diagnostics.CodeAnalysis
         ''' <summary>Gets field or property member names.</summary>
         Public ReadOnly Property Members As String()
     End Class
+#End If
 
 End Namespace
