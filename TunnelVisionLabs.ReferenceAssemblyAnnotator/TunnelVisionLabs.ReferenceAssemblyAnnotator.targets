@@ -5,7 +5,7 @@
 
   <PropertyGroup>
     <!-- Note: only .NET 5.0 and higher include the full set of nullable attributes. -->
-    <_FrameworkIncludesNullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0')))">true</_FrameworkIncludesNullableAttributes>
+    <_FrameworkIncludesNullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0'))">true</_FrameworkIncludesNullableAttributes>
     <_FrameworkIncludesNullableAttributes Condition="'$(_FrameworkIncludesNullableAttributes)' == ''">false</_FrameworkIncludesNullableAttributes>
 
     <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND '$(_FrameworkIncludesNullableAttributes)' != 'true'">true</GenerateNullableAttributes>
