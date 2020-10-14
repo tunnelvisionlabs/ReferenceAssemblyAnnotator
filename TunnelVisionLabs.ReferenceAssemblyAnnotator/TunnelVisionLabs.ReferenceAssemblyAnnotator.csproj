@@ -17,16 +17,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NullableAttributes.gen2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="NullableAttributes.gen2.vb" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="0.11.0" />
     <PackageReference Include="Microsoft.Build.Framework" Version="16.0.461" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.0.461" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="NullableAttributes.gen2.vb">
+      <PackagePath>build</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="NullableAttributes.gen2.cs">
+      <PackagePath>build</PackagePath>
+      <Pack>true</Pack>
+    </Content>
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.props" Pack="true" PackagePath="build" />
     <Content Include="TunnelVisionLabs.ReferenceAssemblyAnnotator.targets" Pack="true" PackagePath="build" />
-    <Content Include="NullableAttributes.cs" Pack="true" PackagePath="build" />
-    <Content Include="NullableAttributes.vb" Pack="true" PackagePath="build" />
+    <Content Include="NullableAttributes.gen1.cs" Pack="true" PackagePath="build" />
+    <Content Include="NullableAttributes.gen1.vb" Pack="true" PackagePath="build" />
   </ItemGroup>
 
   <PropertyGroup>

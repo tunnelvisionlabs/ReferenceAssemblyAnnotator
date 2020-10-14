@@ -11,7 +11,6 @@ Imports System.Diagnostics
 
 Namespace Global.System.Diagnostics.CodeAnalysis
 
-#If Not SUPPORTS_GEN1_NULLABLE_ATTRIBUTES Then
     ''' <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
     <AttributeUsage(AttributeTargets.Field Or AttributeTargets.Parameter Or AttributeTargets.Property, Inherited:=False)>
     Friend NotInheritable Class AllowNullAttribute
@@ -110,69 +109,5 @@ Namespace Global.System.Diagnostics.CodeAnalysis
         ''' <summary>Gets the condition parameter value.</summary>
         Public ReadOnly Property ParameterValue As Boolean
     End Class
-#End If
-
-#If Not SUPPORTS_GEN2_NULLABLE_ATTRIBUTES Then
-    ''' <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
-    <AttributeUsage(AttributeTargets.Method Or AttributeTargets.Property, Inherited:=False, AllowMultiple:=True)>
-    Friend NotInheritable Class MemberNotNullAttribute
-        Inherits Attribute
-
-        ''' <summary>Initializes the attribute with a field or property member.</summary>
-        ''' <param name="member">
-        ''' The field or property member that is promised to be not-null.
-        ''' </param>
-        Public Sub New(member As String)
-            Me.Members = {member}
-        End Sub
-
-        ''' <summary>Initializes the attribute with the list of field and property members.</summary>
-        ''' <param name="members">
-        ''' The list of field and property members that are promised to be not-null.
-        ''' </param>
-        Public Sub New(ParamArray members As String())
-            Me.Members = members
-        End Sub
-
-        ''' <summary>Gets field or property member names.</summary>
-        Public ReadOnly Property Members As String()
-    End Class
-
-    ''' <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values when returning with the specified return value condition.</summary>
-    <AttributeUsage(AttributeTargets.Method Or AttributeTargets.Property, Inherited:=False, AllowMultiple:=True)>
-    Friend NotInheritable Class MemberNotNullWhenAttribute
-        Inherits Attribute
-
-        ''' <summary>Initializes the attribute with the specified return value condition and a field or property member.</summary>
-        ''' <param name="returnValue">
-        ''' The return value condition. If the method returns this value, the associated parameter will not be null.
-        ''' </param>
-        ''' <param name="member">
-        ''' The field or property member that is promised to be not-null.
-        ''' </param>
-        Public Sub New(returnValue As Boolean, member As String)
-            Me.ReturnValue = returnValue
-            Me.Members = {member}
-        End Sub
-
-        ''' <summary>Initializes the attribute with the specified return value condition and list of field and property members.</summary>
-        ''' <param name="returnValue">
-        ''' The return value condition. If the method returns this value, the associated parameter will not be null.
-        ''' </param>
-        ''' <param name="members">
-        ''' The list of field and property members that are promised to be not-null.
-        ''' </param>
-        Public Sub New(ReturnValue As Boolean, ParamArray members As String())
-            Me.ReturnValue = ReturnValue
-            Me.Members = members
-        End Sub
-
-        ''' <summary>Gets the return value condition.</summary>
-        Public ReadOnly Property ReturnValue As Boolean
-
-        ''' <summary>Gets field or property member names.</summary>
-        Public ReadOnly Property Members As String()
-    End Class
-#End If
 
 End Namespace

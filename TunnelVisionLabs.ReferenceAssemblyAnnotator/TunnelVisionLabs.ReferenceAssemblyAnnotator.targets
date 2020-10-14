@@ -12,25 +12,31 @@
     <_FrameworkIncludesGen2NullableAttributes Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp' AND $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '5.0'))">true</_FrameworkIncludesGen2NullableAttributes>
     <_FrameworkIncludesGen2NullableAttributes Condition="'$(_FrameworkIncludesGen2NullableAttributes)' == ''">false</_FrameworkIncludesGen2NullableAttributes>
 
-    <GenerateNullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen1NullableAttributes)' != 'true' OR
-                                                                                      '$(_FrameworkIncludesGen2NullableAttributes)' != 'true')">true</GenerateNullableAttributes>
+    <GenerateGen1NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen1NullableAttributes)' != 'true'">true</GenerateGen1NullableAttributes>
+    <GenerateGen2NullableAttributes Condition="'$(GenerateNullableAttributes)' == '' AND ('$(_FrameworkIncludesGen2NullableAttributes)' != 'true'">true</GenerateGen2NullableAttributes>
 
-    <NullableAttributesPath Condition="'$(NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes$(DefaultLanguageSourceExtension)</NullableAttributesPath>
+    <Gen1NullableAttributesPath Condition="'$(Gen1NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes.gen1$(DefaultLanguageSourceExtension)</Gen1NullableAttributesPath>
+    <Gen2NullableAttributesPath Condition="'$(Gen2NullableAttributesPath)' == ''">$(MSBuildThisFileDirectory)NullableAttributes.gen2$(DefaultLanguageSourceExtension)</Gen2NullableAttributesPath>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DefineConstants Condition="'$(_FrameworkIncludesGen1NullableAttributes)' == 'true'">$(DefineConstants);SUPPORTS_GEN1_NULLABLE_ATTRIBUTES</DefineConstants>
-    <DefineConstants Condition="'$(_FrameworkIncludesGen2NullableAttributes)' == 'true'">$(DefineConstants);SUPPORTS_GEN2_NULLABLE_ATTRIBUTES</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(GenerateNullableAttributes)' == 'true' AND Exists($(NullableAttributesPath))">
-    <Compile Include="$(NullableAttributesPath)" Visible="false" />
+  <ItemGroup Condition="'$(GenerateGen1NullableAttributes)' == 'true' AND Exists($(Gen1NullableAttributesPath))">
+    <Compile Include="$(Gen1NullableAttributesPath)" Visible="false" />
 
     <!-- Workaround for https://github.com/dotnet/wpf/issues/810 -->
-    <_GeneratedCodeFiles Include="$(NullableAttributesPath)" Visible="false" Condition="'$(UseWPF)' == 'true'" />
+    <_GeneratedCodeFiles Include="$(Gen1NullableAttributesPath)" Visible="false" Condition="'$(UseWPF)' == 'true'" />
 
     <!-- Make sure the source file is embedded in PDB to support Source Link -->
-    <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(NullableAttributesPath)" />
+    <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(Gen1NullableAttributesPath)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(GenerateGen2NullableAttributes)' == 'true' AND Exists($(Gen2NullableAttributesPath))">
+    <Compile Include="$(Gen2NullableAttributesPath)" Visible="false" />
+
+    <!-- Workaround for https://github.com/dotnet/wpf/issues/810 -->
+    <_GeneratedCodeFiles Include="$(Gen2NullableAttributesPath)" Visible="false" Condition="'$(UseWPF)' == 'true'" />
+
+    <!-- Make sure the source file is embedded in PDB to support Source Link -->
+    <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(Gen2NullableAttributesPath)" />
   </ItemGroup>
 
   <PropertyGroup>
