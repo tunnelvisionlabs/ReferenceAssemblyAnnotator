@@ -4,9 +4,9 @@
       "commandName": "Project",
       "commandLineArgs": "\"$(NuGetPackageRoot)\\microsoft.win32.primitives\\4.3.0\\ref\\netstandard1.3\\Microsoft.Win32.Primitives.dll\" \"$(NuGetPackageRoot)\\microsoft.win32.primitives\\4.3.0\\ref\\netstandard1.3\\;$(NuGetPackageRoot)\\system.runtime\\4.3.0\\ref\\netstandard1.5\\\\\" \"$(NuGetPackageRoot)\\microsoft.netcore.app.ref\\6.0.0\\ref\\net6.0\\Microsoft.Win32.Primitives.dll\" Microsoft.Win32.Primitives.dll"
     },
-    "System.ComponentModel.DataAnnotations (netcoreapp2.0)": {
+    "System.ComponentModel.DataAnnotations (netcoreapp3.1)": {
       "commandName": "Project",
-      "commandLineArgs": "\"$(NuGetPackageRoot)\\microsoft.netcore.app\\2.0.0\\ref\\netcoreapp2.0\\System.ComponentModel.DataAnnotations.dll\" \"$(NuGetPackageRoot)\\microsoft.netcore.app\\2.0.0\\ref\\netcoreapp2.0\\\\\" \"$(NuGetPackageRoot)\\microsoft.netcore.app.ref\\6.0.0\\ref\\net6.0\\System.ComponentModel.DataAnnotations.dll\" System.ComponentModel.DataAnnotations.dll"
+      "commandLineArgs": "\"$(NuGetPackageRoot)\\microsoft.netcore.app\\3.1.0\\ref\\netcoreapp3.1\\System.ComponentModel.DataAnnotations.dll\" \"$(NuGetPackageRoot)\\microsoft.netcore.app\\3.1.0\\ref\\netcoreapp3.1\\\\\" \"$(NuGetPackageRoot)\\microsoft.netcore.app.ref\\6.0.0\\ref\\net6.0\\System.ComponentModel.DataAnnotations.dll\" System.ComponentModel.DataAnnotations.dll"
     }
   }
 }

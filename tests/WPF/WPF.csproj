@@ -3,7 +3,7 @@
   <PropertyGroup>
     <!-- Using net40 instead of net35. jnm2.ReferenceAssemblies.net35 isn't automatically referenced by the .NET Core SDK like
          Microsoft.NETFramework.ReferenceAssemblies is, and therefore it doesn't provide assemblies to the WPF temp assembly project. -->
-    <TargetFrameworks>net40;net48;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net40;net48;netcoreapp3.1;net5.0-windows;net6.0-windows</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
