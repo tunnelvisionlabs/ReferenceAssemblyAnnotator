@@ -17,7 +17,7 @@
     <Compile Include="$(NullableAttributesPath)" Visible="false" />
 
     <!-- Workaround for https://github.com/dotnet/wpf/issues/810 -->
-    <_GeneratedCodeFiles Include="$(NullableAttributesPath)" Visible="false" Condition="'$(UseWPF)' == 'true'" />
+    <_GeneratedCodeFiles Include="$(NullableAttributesPath)" Visible="false" Condition="'$(UseWPF)' == 'true' AND '$(IncludePackageReferencesDuringMarkupCompilation)' != 'true'" />
 
     <!-- Make sure the source file is embedded in PDB to support Source Link -->
     <EmbeddedFiles Condition="'$(DebugType)' != 'none'" Include="$(NullableAttributesPath)" />
