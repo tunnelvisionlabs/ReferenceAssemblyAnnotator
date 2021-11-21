@@ -287,7 +287,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             return annotatedTypeDefinition;
         }
 
-        private static MethodDefinition FindMatchingMethod(SuppressibleLoggingHelper? log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
+        private static MethodDefinition? FindMatchingMethod(SuppressibleLoggingHelper? log, MethodDefinition methodDefinition, TypeDefinition annotatedTypeDefinition)
         {
             try
             {
@@ -305,12 +305,12 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             }
         }
 
-        private static PropertyDefinition FindMatchingProperty(PropertyDefinition propertyDefinition, TypeDefinition annotatedTypeDefinition)
+        private static PropertyDefinition? FindMatchingProperty(PropertyDefinition propertyDefinition, TypeDefinition annotatedTypeDefinition)
         {
             return annotatedTypeDefinition.Properties.SingleOrDefault(property => EquivalenceComparers.PropertyDefinition.Equals(propertyDefinition, property));
         }
 
-        private static FieldDefinition FindMatchingField(FieldDefinition fieldDefinition, TypeDefinition annotatedTypeDefinition)
+        private static FieldDefinition? FindMatchingField(FieldDefinition fieldDefinition, TypeDefinition annotatedTypeDefinition)
         {
             return annotatedTypeDefinition.Fields.SingleOrDefault(property => property.Name == fieldDefinition.Name);
         }

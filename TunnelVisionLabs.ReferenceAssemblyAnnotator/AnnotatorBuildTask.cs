@@ -74,7 +74,7 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
         {
             var log = new SuppressibleLoggingHelper(Log, requiredPrefix: "RA", DisabledWarnings);
 
-            string unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
+            string? unannotatedReferenceAssembly = TargetFrameworkDirectories.Select(path => Path.Combine(path.ItemSpec, UnannotatedReferenceAssembly + ".dll")).FirstOrDefault(File.Exists);
             string annotatedReferenceAssembly = Path.Combine(AnnotatedReferenceAssemblyDirectory, UnannotatedReferenceAssembly + ".dll");
             bool foundAnnotatedAssembly = File.Exists(annotatedReferenceAssembly);
 
