@@ -36,7 +36,9 @@ test_script:
 - git clean -dxf tests
 - msbuild /restore tests/SingleTFM /p:TestFramework=net6.0 /warnaserror /nr:false /v:m
 - git clean -dxf tests
-- msbuild /restore tests/WPF /warnaserror /nr:false /v:m
+- msbuild /restore tests/WPF /warnaserror /nr:false /v:m /p:IncludePackageReferencesDuringMarkupCompilation=false
+- git clean -dxf tests
+- msbuild /restore tests/WPF /warnaserror /nr:false /v:m /p:IncludePackageReferencesDuringMarkupCompilation=true
 
 - git clean -dxf tests
 - dotnet msbuild -restore tests/MultiTFM -warnaserror -nr:false -v:m
@@ -61,6 +63,8 @@ test_script:
 - git clean -dxf tests
 - dotnet msbuild -restore tests/SingleTFM -p:TestFramework=net6.0 -warnaserror -nr:false -v:m
 - git clean -dxf tests
-- dotnet msbuild -restore tests/WPF -warnaserror -nr:false -v:m
+- dotnet msbuild -restore tests/WPF -warnaserror -nr:false -v:m /p:IncludePackageReferencesDuringMarkupCompilation=false
+- git clean -dxf tests
+- dotnet msbuild -restore tests/WPF -warnaserror -nr:false -v:m /p:IncludePackageReferencesDuringMarkupCompilation=true
 artifacts:
 - path: 'TunnelVisionLabs.ReferenceAssemblyAnnotator\**\*.nupkg'
