@@ -16,7 +16,9 @@ namespace TunnelVisionLabs.ReferenceAssemblyAnnotator
             {
             }
 
+#pragma warning disable CS8614 // In CLI builds: Nullability of reference types in type of parameter 'x' of 'bool ArrayDimensionEqualityComparer.Equals(ArrayDimension x, ArrayDimension y)' doesn't match implicitly implemented member 'bool IEqualityComparer<ArrayDimension>.Equals(ArrayDimension x, ArrayDimension y)'.
             public bool Equals(ArrayDimension x, ArrayDimension y)
+#pragma warning restore CS8614
             {
                 return x.LowerBound == y.LowerBound
                     && x.UpperBound == y.UpperBound;
